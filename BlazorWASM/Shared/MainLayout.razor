@@ -1,0 +1,18 @@
+﻿@inherits LayoutComponentBase
+@using Login
+<div class="page">
+    <div class="sidebar">
+        <NavMenu/>  <!--Blazor component which is a piece of UI) that contains the HTML and code for the left side navigation menu.-->
+    </div>
+
+    <main>
+        <div class="top-row px-4"> <!--  This is the top bar, always present.   -->
+            <LoginButtons/>
+            @* <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a> *@
+        </div>
+
+        <article class="content px-4">
+            @Body    <!--the content of the page will be inserted at this variable-->
+        </article>
+    </main>
+</div>
