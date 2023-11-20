@@ -4,14 +4,25 @@ namespace Domain.Models;
 public class Post
 {
     public int Id { get; set; }
-    public User Owner { get; }
-    public string Title { get; }
-    public string Body { get; }
+    public User Owner { get; private set; }
+    public int OwnerId { get; set; } //an explicit foreign key,EFC will identify this as an FK because of naming conventions.
+    public string Title { get; private set; }
+    public string Body { get; private set; }
 
-    public Post(User owner, string title, string body)
+    // public Post(User owner, string title, string body)
+    // {
+    //     Owner = owner;
+    //     Title = title;
+    //     Body = body;
+    // }
+    public Post(int ownerId, string title, string body)
     {
-        Owner = owner;
+        OwnerId = ownerId;
         Title = title;
         Body = body;
     }
+   
+
+    //no-arguments constructor for EFC to call when creating objects
+    private Post() { }
 }

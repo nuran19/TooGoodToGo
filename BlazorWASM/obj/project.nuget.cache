@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "S5EE2TN4x7TVZ/4BmXKvdxRpXu7EPjw/7CcNe+O3xJ019XNiqizNhzQuGU0vn4bcqq6zJhWs1tL2rwx5FK+Sbg==",
+  "dgSpecHash": "NtaIOfwpPCk7k1BM+BWZSBtPlQKv8I3y3rkp5fTz9W79HTrfvQ6Z2ReTmj/SFlpf91sXQLizn0a20PrwKFPOZg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Danka\\RiderProjects\\ForumApp\\BlazorWASM\\BlazorWASM.csproj",
   "expectedPackageFiles": [
@@ -32,7 +32,7 @@
     "C:\\Users\\Danka\\.nuget\\packages\\system.io.pipelines\\7.0.0\\system.io.pipelines.7.0.0.nupkg.sha512",
     "C:\\Users\\Danka\\.nuget\\packages\\system.text.encodings.web\\7.0.0\\system.text.encodings.web.7.0.0.nupkg.sha512",
     "C:\\Users\\Danka\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
-    "C:\\Users\\Danka\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\7.0.13\\microsoft.netcore.app.runtime.mono.browser-wasm.7.0.13.nupkg.sha512"
+    "C:\\Users\\Danka\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\7.0.14\\microsoft.netcore.app.runtime.mono.browser-wasm.7.0.14.nupkg.sha512"
   ],
   "logs": []
 }

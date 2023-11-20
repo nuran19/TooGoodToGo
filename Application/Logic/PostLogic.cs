@@ -23,9 +23,8 @@ public class PostLogic : IPostLogic
         {
             throw new Exception($"User with id {dto.OwnerId} was not found.");
         }
-
         ValidatePost(dto);
-        Post post = new Post(user, dto.Title, dto.Body);
+        Post post = new Post(user.Id, dto.Title, dto.Body);
         Post created = await postDao.CreateAsync(post);
         return created;
     }
