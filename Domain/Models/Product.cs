@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Shared.Models;
 
 namespace Domain.Models;
 // posts keep track of its assignee
@@ -11,24 +12,16 @@ public class Product
     public User Owner { get; private set; }
     public SubCategory SubCategory { get; private set; }
     public int OwnerId { get; set; } //an explicit foreign key,EFC will identify this as an FK because of naming conventions.
- 
- //   [ForeignKey("CompanyId")]
+    
     public int CompanyId { get; set; }  
     public int SubCategoryId { get; set; } 
     public string Type { get; private set; }
     public string Brand { get; private set; }
     public int Qty { get; private set; }
     public bool? IsEco { get; private set; } //??priv set??  //initially false by not setting
-
     
-    // public Product(User owner,SubCategory subCategory, string type, string brand, int qty)
-    // {
-    //     Owner = owner;
-    //     SubCategory = subCategory;
-    //     Type = type;
-    //     Brand = brand;
-    //     Qty = qty;
-    // }
+    public ICollection<DayContent> DayContents { get; set; }
+    
     
     //????for creating products error added jsonConstructor
     [JsonConstructor]

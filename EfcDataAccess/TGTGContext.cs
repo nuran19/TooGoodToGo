@@ -1,5 +1,6 @@
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.Models;
 
 namespace EfcDataAccess;
 
@@ -22,10 +23,13 @@ public class TGTGContext: DbContext
         modelBuilder.Entity<User>().HasKey(user => user.Id);
         modelBuilder.Entity<Company>().HasKey(company => company.Id);
         modelBuilder.Entity<SubCategory>().HasKey(subCategory => subCategory.Id);
+        modelBuilder.Entity<Category>().HasKey(Category => Category.Id);
+
+        modelBuilder.Entity<DayContent>().HasIndex(dc => dc.Date).IsUnique();
 
         //todo first add company
         
-        modelBuilder.Entity<User>().HasData(new List<User>()
+        /*modelBuilder.Entity<User>().HasData(new List<User>()
         {
             new User()
             {
@@ -34,6 +38,6 @@ public class TGTGContext: DbContext
                 Role = "qwer",
                 CompanyId = 1
             }
-        });
+        });*/
     }
 }

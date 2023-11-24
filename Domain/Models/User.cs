@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Shared.Models;
 
 namespace Domain.Models;
 
@@ -14,8 +15,8 @@ public class User
     
     public string Role { get; set;}
     
+    public ICollection<DayContent> DayContents { get; set; }
     
-
     //two way navigation property -efc
     [JsonIgnore]
     public ICollection<Product> Products { get; set; }
