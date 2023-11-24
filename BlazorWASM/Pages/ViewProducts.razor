@@ -1,0 +1,142 @@
+
+@page "/ViewProducts"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using System.Security.Claims
+@inject IProductService ProductService
+
+@attribute [Authorize] 
+@* need to be logged in for access*@
+
+<h1> Products</h1>
+
+<div class="filter-bar">
+     @* <label>Looking for something specific, add search filters:</label> *@
+     <div class="filters-container">
+         <label>Looking for something specific, add search filters:</label>
+         <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => doShowFilters = !doShowFilters)" alt="Funnel"/>
+         @if (doShowFilters)
+         {
+             <div class="filter">
+                 <label>Username:</label>
+                 <input type="text" @bind="usernameFilter"/>
+             </div>
+             <div class="filter">
+                 <label>User id:</label>
+                 <input type="number" @bind="userIdFilter"/>
+             </div>
+             <div class="filter">
+                 <label>Subcategory contains:</label>
+                 <input type="text" @bind="subCategoryNameFilter"/>
+             </div>
+             <div class="filter">
+                 <label>Title contains:</label>
+                 <input type="text" @bind="typeContainsFilter"/>
+             </div>
+             <div class="filter">
+                 <label>Text contains:</label>
+                 <input type="text" @bind="brandContainsFilter"/>
+             </div>
+             <div>
+                 <button  @onclick="LoadProducts" class="btn">Search</button>
+             </div>
+         }
+     </div>
+      
+</div>
+
+
+@if (products == null)
+{
+}
+else if (!products.Any())
+{
+    <p>No posts to display</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Products</th>
+           
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in products)
+        {
+            @* <tr> *@
+            @*     <td >@item.Title</td> *@
+            @*     <td> <a href="/SingleProduct/@item.Id">View post</a> </td>  <!--??????????add id--> *@
+            @* </tr> *@
+            <tr>
+                <td> <a href="/SingleProduct/@item.Id">@item.Type</a> </td>  
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;   //added to remember the logged in claims
+    
+    
+    private IEnumerable<Product>? products;    //return obj or find way to get id 
+    
+    private string msg = "";
+    
+    private bool doShowFilters = false;
+    private string? usernameFilter;
+    private int? userIdFilter;
+    private string? subCategoryNameFilter;    //name???? 
+    private string? typeContainsFilter;
+    private string? brandContainsFilter;
+
+    protected override async Task OnInitializedAsync()  //loading when page opens
+    {
+        msg = "";
+        
+        try
+        {
+         int? companyId = await GetCompanyIdAsync();  ///HERE COMPANY ID
+            products = await ProductService.GetAsync(usernameFilter, userIdFilter,companyId.Value,subCategoryNameFilter,  typeContainsFilter, brandContainsFilter);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+    private async Task LoadProducts()
+    {
+        try
+        {
+            int? companyId = await GetCompanyIdAsync();
+            products = await ProductService.GetAsync(usernameFilter, userIdFilter, companyId.Value, subCategoryNameFilter, typeContainsFilter, brandContainsFilter);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+    //log in remembering claims to remember company id
+    private async Task<int?> GetCompanyIdAsync()   //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+
+        IEnumerable<Claim> claims = user.Claims;
+        Claim idClaim = claims.First(claim => claim.Type.Equals("CompanyId"));
+        int id = int.Parse(idClaim.Value);
+        return id;
+    }
+    
+}

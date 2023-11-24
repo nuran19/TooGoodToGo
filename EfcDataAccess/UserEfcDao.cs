@@ -7,9 +7,9 @@ namespace EfcDataAccess;
 
 public class UserEfcDao : IUserDao
 {
-    private readonly PostContext context;
+    private readonly TGTGContext context;
 
-    public UserEfcDao(PostContext context)
+    public UserEfcDao(TGTGContext context)
     {
         this.context = context;
     }

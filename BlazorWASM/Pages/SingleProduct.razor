@@ -1,0 +1,72 @@
+
+@page "/SingleProduct/{id:int}"  
+@using HttpClients.ClientInterfaces
+@using Domain.Models
+@using Domain.DTOs
+@inject IProductService ProductService
+
+@attribute [Authorize] 
+@* need to be logged in for access*@
+
+
+<!-- {int:id} ????  "SingleProduct/{int:id}-->
+
+<h3>Selected Product</h3>
+
+@if (product == null)
+{
+    <p>No product to display</p>
+}
+else
+{
+    <div class="table-container">
+    <table class="table">
+        @* <tr> *@
+        @*     <td>@product.Id</td> *@
+        @* </tr> *@
+        <tr>
+            <td class="productview">Added by:  @product.OwnerName</td>
+        </tr>
+        <tr>
+            <td class="productview">Subcategory: @product.SubCategoryName</td>
+        </tr>
+    <tr>
+        <td class="productview">Product type: @product.Type</td>
+    </tr>
+    <tr>
+        <td class="productview">Brand: @product.Brand</td>
+    </tr>
+        <tr>
+            <td class="productview">Quantity: @product.Qty</td>
+        </tr>
+    </table>
+    </div>
+}
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private ProductBasicDto product;
+   
+   private string msg = "";
+    
+    protected override async Task OnInitializedAsync()  //loading when page opens
+    {
+        msg = "";
+        try
+        {
+            product = await ProductService.GetByIdAsync(@Id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+}

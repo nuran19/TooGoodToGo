@@ -1,0 +1,142 @@
+@page "/CreateProduct"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Domain.DTOs
+@using System.Security.Claims
+@inject IProductService ProductService;
+@inject NavigationManager navMgr;
+
+@attribute [Authorize] 
+@* need to be logged in for access*@
+
+
+<div class="card">
+
+
+    <h3>Create Product</h3>
+
+    <div class="form-group field">
+         @* <label>Company id:</label> *@
+         @*        <input class="title" type="text" @bind="companyId"/> *@
+        <label>Product Subcategory:</label>
+        <input class="title" type="text" @bind="subCategoryId"/>
+
+        <label>Product Type:</label>
+        <input class="title" type="text" @bind="productType"/>
+
+        <label>Product Brand:</label>
+        <textarea type="text" @bind="productBrand" class="postBody"></textarea>
+        <label>Product Quantity:</label>
+        <textarea type="text" @bind="productQty" class="postBody"></textarea>
+    </div>
+
+    <div class="button-row">
+        @if (!string.IsNullOrEmpty(msg))
+        {
+            <label style="color: red">@msg</label>
+        }
+        <button @onclick="Create" class="acceptbtn">Create</button>
+    </div>
+</div>
+
+@code {
+    
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;   //add to remember the logged in claims
+
+    private int? userId;
+    private int? companyId;
+    private int subCategoryId;
+    private string productType = "";
+    private string productBrand = "";
+    private int productQty = 0;
+
+    private string msg = "";
+
+    /*  protected override async Task OnInitializedAsync()
+    {
+        msg = "";
+        try
+        {
+            users = await userService.GetUsers();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    } 
+    */
+
+    private async Task Create()
+    {
+        userId = await GetUserIdAsync();
+        companyId = await GetCompanyIdAsync();
+        msg = "";
+        if (userId == null)
+        {
+            msg = "No user id available for product creation!";
+            return;
+        }
+        if (subCategoryId == null)
+        {
+            msg = "No subcategory id available for product creation!";
+            return;
+        }
+        if (string.IsNullOrEmpty(productType))
+        {
+            msg = "Product type cannot be empty!";
+            return;
+        }
+        if (string.IsNullOrEmpty(productBrand))
+        {
+            msg = "Product brand cannot be empty!";
+            return;
+        }
+        if (productQty==0)
+        {
+            msg = "Product quantity cannot be 0!";
+            return;
+        }
+
+        try
+        {
+            ProductCreationDto dto = new(userId.Value, companyId.Value,  subCategoryId, productType, productBrand, productQty);
+            var id = await ProductService.CreateAsync(dto);
+
+            navMgr.NavigateTo($"/SingleProduct/{id}");
+       //     msg = "Product successfully created";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    //log in remembering claims 
+    private async Task<int?> GetUserIdAsync()   //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+
+        IEnumerable<Claim> claims = user.Claims;
+        Claim idClaim = claims.First(claim => claim.Type.Equals("UserId"));
+        int id = int.Parse(idClaim.Value);
+        return id;
+    }
+    //log in remembering claims to remember company id
+    private async Task<int?> GetCompanyIdAsync()   //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+
+        IEnumerable<Claim> claims = user.Claims;
+        Claim idClaim = claims.First(claim => claim.Type.Equals("CompanyId"));
+        int id = int.Parse(idClaim.Value);
+        return id;
+    }
+
+
+}

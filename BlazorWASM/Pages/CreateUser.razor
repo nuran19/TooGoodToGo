@@ -1,7 +1,11 @@
 ﻿@page "/CreateUser"  
 @using Domain.DTOs
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
 @inject IUserService userService;
+
+@attribute [Authorize] 
+@* need to be logged in for access*@
 
 <div class="card">
     <h3>Create User</h3>
@@ -10,6 +14,10 @@
         <input type="text" @bind="username" @bind:event="oninput"/>
         <label>Password:</label>
         <input type="text" @bind="password" @bind:event="oninput"/>
+           <label>Company id:</label>
+                <input type="text" @bind="companyId" @bind:event="oninput"/>
+        <label>Role: </label>
+        <input type="text" @bind="role" @bind:event="oninput"/>
         @if (!string.IsNullOrEmpty(resultMsg))
         {
             <label style="color: @color">@resultMsg</label>
@@ -21,20 +29,29 @@
 </div>
 
 @code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;   //add to remember the logged in claims
+    
     private string username = "";
     private string password = "";
+    private int companyId;
+    private string role = "";
     private string resultMsg = "";
     private string color = "";
     
+    //////ADD everywhere 
+    //companyId = (int)await GetCompanyIdAsync();; //remember the company id of user since manager is adding new user must be same company id???????????????????????????????
+   
     private async Task Create()
     {
         resultMsg = "";
 
         try
         {
-            await userService.Create(new UserCreationDto(username, password));
+            await userService.Create(new UserCreationDto(username, password, companyId, role));
             username = "";
             password = "";
+            role = "";
             resultMsg = "User successfully created";
             color = "green";
         }
@@ -44,5 +61,17 @@
             resultMsg = e.Message;
             color = "red";
         }
+    }
+    
+    //log in remembering claims to remember company id
+    private async Task<int?> GetCompanyIdAsync()   //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+
+        IEnumerable<Claim> claims = user.Claims;
+        Claim idClaim = claims.First(claim => claim.Type.Equals("CompanyId"));
+        int id = int.Parse(idClaim.Value);
+        return id;
     }
 }

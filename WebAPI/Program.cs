@@ -4,8 +4,8 @@ using Application.Logic;
 using Application.LogicInterfaces;
 using Domain.Auth;
 using EfcDataAccess;
-using FileData;
-using FileData.DAOs;
+//using FileData;
+//using FileData.DAOs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,18 +19,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //tell the framework is available for injection
-builder.Services.AddScoped<FileContext>();
+//builder.Services.AddScoped<FileContext>();
 //builder.Services.AddScoped<IUserDao, UserFileDao>();  //for file 
 builder.Services.AddScoped<IUserDao, UserEfcDao>(); //for database 
 builder.Services.AddScoped<IUserLogic, UserLogic>();
 
 //add post -register services
-//builder.Services.AddScoped<IPostDao, PostFileDao>(); //for file
-builder.Services.AddScoped<IPostDao, PostEfcDao>();  //for database 
-builder.Services.AddScoped<IPostLogic, PostLogic>();
+//builder.Services.AddScoped<IProductDao, PostFileDao>(); //for file
+builder.Services.AddScoped<IProductDao, ProductEfcDao>();  //for database 
+builder.Services.AddScoped<IProductLogic, ProductLogic>();
 
 //database 
-builder.Services.AddDbContext<PostContext>();
+builder.Services.AddDbContext<TGTGContext>();
 
 // authentication with info about JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

@@ -70,10 +70,10 @@ public class AuthController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
             new Claim(ClaimTypes.Name, user.UserName),
             new Claim("UserId", user.Id.ToString()),
+            new Claim("CompanyId", user.CompanyId.ToString()),
+            //new Claim(ClaimTypes.Role, user.Role),   
+            
             //add a claim for each auth policy 
-            
-            
-            // new Claim(ClaimTypes.Role, user.Role),   
             // new Claim("DisplayName", user.Name),
             // new Claim("Email", user.Email),
             // new Claim("Age", user.Age.ToString()),

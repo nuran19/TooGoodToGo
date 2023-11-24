@@ -15,7 +15,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 //create user - register as service
 builder.Services.AddScoped<IUserService, UserHttpClient>();
 //create post
-builder.Services.AddScoped<IPostService, PostHttpClient>();
+builder.Services.AddScoped<IProductService, ProductHttpClient>();
 
 //log in auth
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();

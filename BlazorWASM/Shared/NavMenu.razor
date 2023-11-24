@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">BlazorWASM</a>
+        <a class="navbar-brand" href="">Too Good To GO</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -14,33 +14,41 @@
         @*         <span class="oi oi-home" aria-hidden="true"></span> Home *@
         @*     </NavLink> *@
         @* </div> *@
-          <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="ViewPosts">
-                        <span class="oi oi-home" aria-hidden="true"></span> View All Posts
+        
+        <AuthorizeView>
+            <NotAuthorized>  
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Home">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Home
                     </NavLink>
                 </div>
-        <AuthorizeView>
-        <NotAuthorized>  
-            <div class="nav-item px-3">
-                <NavLink class="nav-link" href="CreateUser">
-                    <span class="oi oi-plus" aria-hidden="true"></span> Create user
-                </NavLink>
-            </div>
-        </NotAuthorized>
+            </NotAuthorized>
         </AuthorizeView>
+        
+        
         @* <AuthorizeView Policy="MustBeSomeRole">  to see depending to role*@ 
         <AuthorizeView>
             <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="CreatePost">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Create post
-                    </NavLink>
-                </div>
+                 <div class="nav-item px-3">
+                 <NavLink class="nav-link" href="CreateUser">
+                     <span class="oi oi-plus" aria-hidden="true"></span> Create user
+                 </NavLink>
+                 </div>
+                 <div class="nav-item px-3">
+                     <NavLink class="nav-link" href="CreateProduct">
+                         <span class="oi oi-plus" aria-hidden="true"></span> Add New Product
+                     </NavLink>
+                 </div>
+                    <div class="nav-item px-3">
+                                     <NavLink class="nav-link" href="ViewProducts">
+                                         <span class="oi oi-home" aria-hidden="true"></span> View All Products
+                                     </NavLink>
+                                 </div>
             </Authorized>
         </AuthorizeView>
         @* <div class="nav-item px-3"> *@
-        @*     <NavLink class="nav-link" href="ViewPosts"> *@
-        @*         <span class="oi oi-plus" aria-hidden="true"></span> View Posts *@
+        @*     <NavLink class="nav-link" href="ViewProducts"> *@
+        @*         <span class="oi oi-plus" aria-hidden="true"></span> View Products *@
         @*     </NavLink> *@
         @* </div> *@
         

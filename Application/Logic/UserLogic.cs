@@ -25,7 +25,9 @@ public class UserLogic : IUserLogic
         User toCreate = new User
         {
             UserName = dto.UserName,
-            Password = dto.Password
+            Password = dto.Password,
+            CompanyId = dto.CompanyId,
+            Role = dto.Role
         };
         //A new User object is created, and handed over to the DAO for storage.
         //  We return the newly created User object, now with an ID too. This ID is generated in the Data layer.
@@ -40,6 +42,7 @@ public class UserLogic : IUserLogic
     {
         string userName = userToCreate.UserName;
         string password = userToCreate.Password;
+        string role = userToCreate.Role;
         if (userName.Length < 3)
             throw new Exception("Username must be at least 3 characters!");
 
@@ -48,7 +51,9 @@ public class UserLogic : IUserLogic
         
         if(password.Length < 8)
             throw new Exception("Password must be at least 8 characters!");
-        
+        if(!role.Equals("Employee") && !role.Equals("Manager"))
+            throw new Exception("Role must be Employee or Manager!");
+         
     } 
 
     
