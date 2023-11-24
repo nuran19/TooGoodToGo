@@ -5,7 +5,6 @@ namespace Application.DaoInterfaces;
 
 public interface IProductDao
 {
-    // fytghyjgkyj
     Task<Product> CreateAsync(Product product);  //The method takes a product and returns a product (because the Id is set).
     
     //view products - search
