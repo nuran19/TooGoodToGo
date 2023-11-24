@@ -22,5 +22,18 @@ public class TGTGContext: DbContext
         modelBuilder.Entity<User>().HasKey(user => user.Id);
         modelBuilder.Entity<Company>().HasKey(company => company.Id);
         modelBuilder.Entity<SubCategory>().HasKey(subCategory => subCategory.Id);
+
+        //todo first add company
+        
+        modelBuilder.Entity<User>().HasData(new List<User>()
+        {
+            new User()
+            {
+                Password = "qwert",
+                UserName = "qwer",
+                Role = "qwer",
+                CompanyId = 1
+            }
+        });
     }
 }
