@@ -21,7 +21,7 @@ public class ProductEfcDao : IProductDao
         await context.SaveChangesAsync();
         return added.Entity;
     }
-    //view products - search??????????????????????????????????????????
+    //view products - //todo search bar
    public async Task<IEnumerable<Product>> GetAsync(SearchProductParametersDto searchParameters)  
     {
         IQueryable<Product> query = context.Products.Include (product => product.Owner).AsQueryable(); 
@@ -69,7 +69,22 @@ public class ProductEfcDao : IProductDao
         Product? found = await context.Products
             .Include(product => product.Owner) // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
            .Include (product => product.SubCategory)  // to access subcat name!!!!!
+            .ThenInclude(product=> product.Category)
             .SingleOrDefaultAsync(product => product.Id == productId);
         return found;
     }
+   
+   //delete product
+   public async Task DeleteAsync(int id)
+   {
+       Product? existing = await GetByIdAsync(id);
+       if (existing == null)
+       {
+           throw new Exception($"Product with id {id} not found");
+       }
+
+       context.Products.Remove(existing);
+       await context.SaveChangesAsync();
+   }
+   
 }

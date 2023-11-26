@@ -4,6 +4,7 @@
 @using Domain.Models
 @using Domain.DTOs
 @inject IProductService ProductService
+@inject NavigationManager navMgr;
 
 @attribute [Authorize] 
 @* need to be logged in for access*@
@@ -11,7 +12,7 @@
 
 <!-- {int:id} ????  "SingleProduct/{int:id}-->
 
-<h3>Selected Product</h3>
+<h3>Product</h3>
 
 @if (product == null)
 {
@@ -20,26 +21,32 @@
 else
 {
     <div class="table-container">
-    <table class="table">
-        @* <tr> *@
-        @*     <td>@product.Id</td> *@
-        @* </tr> *@
-        <tr>
-            <td class="productview">Added by:  @product.OwnerName</td>
-        </tr>
-        <tr>
-            <td class="productview">Subcategory: @product.SubCategoryName</td>
-        </tr>
-    <tr>
-        <td class="productview">Product type: @product.Type</td>
-    </tr>
-    <tr>
-        <td class="productview">Brand: @product.Brand</td>
-    </tr>
-        <tr>
-            <td class="productview">Quantity: @product.Qty</td>
-        </tr>
-    </table>
+        <table class="table">
+            @* <tr> *@
+            @*     <td>@product.Id</td> *@
+            @* </tr> *@
+            <tr>
+                <td class="productview">Added by:  @product.OwnerName</td>
+            </tr>
+            <tr>
+                <td class="productview">Category:  @product.CategoryName</td>
+            </tr>
+            <tr>
+                <td class="productview">Subcategory: @product.SubCategoryName</td>
+            </tr>
+            <tr>
+                <td class="productview">Product type: @product.Type</td>
+            </tr>
+            <tr>
+                <td class="productview">Brand: @product.Brand</td>
+            </tr>
+            <tr>
+                <td class="productview">Quantity in grams: @product.Qty</td>
+            </tr>
+        </table>
+    </div>
+    <div class="button-row">
+        <button @onclick="@(() => RemoveProduct(product.Id))"  class="deletebtn">Delete product</button>   <!--how to add disabled button for password as well???? -->
     </div>
 }
 @if (!string.IsNullOrEmpty(msg))
@@ -62,6 +69,28 @@ else
         try
         {
             product = await ProductService.GetByIdAsync(@Id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+    //delete product
+    private async Task RemoveProduct(int productId)
+    {
+        msg = "";
+        try
+        {
+            await ProductService.DeleteAsync(productId);
+            msg = $"Product {product.Id} was successfully deleted.";
+            navMgr.NavigateTo($"/ViewProducts");
+            
+    //for table to reload after deleting an entry Example
+    // var list = new List<Product>(products!);
+    // list.RemoveAll(product => product.Id == productId);
+    // products = list.AsEnumerable();
         }
         catch (Exception e)
         {

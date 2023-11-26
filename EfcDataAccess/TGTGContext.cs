@@ -8,7 +8,14 @@ public class TGTGContext: DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
-
+    
+    //drop down subcat prod
+    public DbSet<SubCategory> SubCategory{ get; set; }
+    public DbSet<Category> Category{ get; set; }
+    
+    // public DbSet<DayContent> DayContents { get; set; }  //todo
+    
+    
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
        // optionsBuilder.UseSqlite("Data Source = Product.db");  //initial 
@@ -23,7 +30,7 @@ public class TGTGContext: DbContext
         modelBuilder.Entity<User>().HasKey(user => user.Id);
         modelBuilder.Entity<Company>().HasKey(company => company.Id);
         modelBuilder.Entity<SubCategory>().HasKey(subCategory => subCategory.Id);
-        modelBuilder.Entity<Category>().HasKey(Category => Category.Id);
+        modelBuilder.Entity<Category>().HasKey(category => category.Id);
 
         modelBuilder.Entity<DayContent>().HasIndex(dc => dc.Date).IsUnique();
 

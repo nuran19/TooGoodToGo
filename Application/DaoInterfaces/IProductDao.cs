@@ -11,6 +11,8 @@ public interface IProductDao
     Task<IEnumerable<Product>> GetAsync(SearchProductParametersDto searchParameters);
     
     //view single product  
-    Task <Product?> GetByIdAsync(int postId);  
-    
+    Task <Product?> GetByIdAsync(int id);
+  
+    //delete product
+    Task DeleteAsync(int id);
 }

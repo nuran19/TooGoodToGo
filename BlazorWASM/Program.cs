@@ -16,6 +16,10 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://
 builder.Services.AddScoped<IUserService, UserHttpClient>();
 //create post
 builder.Services.AddScoped<IProductService, ProductHttpClient>();
+//cat
+builder.Services.AddScoped<ICategoryService, CategoryHttpClient>();
+//subcat 
+ builder.Services.AddScoped<ISubCategoryService, SubCategoryHttpClient>();
 
 //log in auth
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();

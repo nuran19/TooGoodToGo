@@ -28,6 +28,14 @@ builder.Services.AddScoped<IUserLogic, UserLogic>();
 //builder.Services.AddScoped<IProductDao, PostFileDao>(); //for file
 builder.Services.AddScoped<IProductDao, ProductEfcDao>();  //for database 
 builder.Services.AddScoped<IProductLogic, ProductLogic>();
+//cat 
+builder.Services.AddScoped<ICategoryDao, CategoryEfcDao>();  //for database 
+builder.Services.AddScoped<ICategoryLogic, CategoryLogic>();
+
+//sub cat 
+builder.Services.AddScoped<ISubCategoryDao, SubCategoryEfcDao>();  //for database 
+builder.Services.AddScoped<ISubCategoryLogic, SubCategoryLogic>();
+
 
 //database 
 builder.Services.AddDbContext<TGTGContext>();

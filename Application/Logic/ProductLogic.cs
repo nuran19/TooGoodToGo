@@ -19,7 +19,6 @@ public class ProductLogic : IProductLogic
     public async Task<Product> CreateAsync(ProductCreationDto dto)  
     {
         User? user = await userDao.GetByIdAsync(dto.OwnerId);
-   //     SubCategory? subCategory = await subCategoryDao.GetbyIdAsync(dto.SubCategoryId); // ????????????????????
         
         if (user == null)
         {
@@ -27,7 +26,8 @@ public class ProductLogic : IProductLogic
         }
         
         ValidatePost(dto);
-        Product product = new Product(user.Id, user.CompanyId, dto.SubCategoryId, dto.Type, dto.Brand, dto.Qty);
+   //     Product product = new Product(user.Id, user.CompanyId, dto.SubCategoryId, dto.Type, dto.Brand, dto.Qty);
+   Product product = new Product(user.Id, user.CompanyId, dto.SubCategoryId , dto.Type, dto.Brand, dto.Qty);
         Product created = await productDao.CreateAsync(product);
         return created;
     }
@@ -35,6 +35,7 @@ public class ProductLogic : IProductLogic
     private void ValidatePost(ProductCreationDto dto)
     {
         if((int)dto.SubCategoryId==0)   throw new Exception($"Product subcategory was not found.");
+      // if (string.IsNullOrEmpty(dto.SubCategoryName)) throw new Exception("Product subcategory cannot be empty.");
         if (string.IsNullOrEmpty(dto.Type)) throw new Exception("Product Type cannot be empty.");
         if (string.IsNullOrEmpty(dto.Brand)) throw new Exception("Product Brand cannot be empty.");
         if ((int)(dto.Qty)==0) throw new Exception("Product quantity cannot be empty.");  //?????????????????????????????????????????
@@ -47,7 +48,7 @@ public class ProductLogic : IProductLogic
         return productDao.GetAsync(searchParameters); //returns a Task, but we don't need to await it, because we do not need the result here. Instead, we actually just returns that task, to be awaited somewhere else.
     }
 
-    //view single product  ??????/ getasync to take id????/  NEEDED???????????????????????????????/
+    //view single product  ??????
     public async Task<ProductBasicDto> GetByIdAsync(int id)
     {
         Product? product = await productDao.GetByIdAsync(id);
@@ -56,7 +57,19 @@ public class ProductLogic : IProductLogic
             throw new Exception($"Product with id {id} not found");
         }
 
-        return new ProductBasicDto(product.Id, product.Owner.UserName, product.SubCategory.Name, product.Type, product.Brand, product.Qty );
+        return new ProductBasicDto(product.Id, product.Owner.UserName, product.SubCategory.Category.Name, product.SubCategory.Name, product.Type, product.Brand, product.Qty );
+        //todo product.SubCategory.Category.Name 
     }
 
+    //delete
+    public async Task DeleteAsync(int id)
+    {
+        Product? product = await productDao.GetByIdAsync(id);
+        if (product == null)
+        {
+            throw new Exception($"Product with ID {id} was not found!");
+        }
+        await productDao.DeleteAsync(id);
+    }
+  
 }

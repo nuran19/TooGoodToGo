@@ -24,12 +24,10 @@ public class ProductHttpClient : IProductService
             string content = await response.Content.ReadAsStringAsync();
             throw new Exception(content);
         }
-        else
-        {
-            Product product = await response.Content.ReadFromJsonAsync<Product>();
-            return product.Id;
-        }
-       
+
+        Product product = await response.Content.ReadFromJsonAsync<Product>();
+        return product.Id;
+
     } 
     
     //view all products
@@ -115,4 +113,17 @@ public class ProductHttpClient : IProductService
         )!;   // null-suppressor "!"
         return product;
     }
+
+    //delete product
+    
+    public async Task DeleteAsync(int id)
+    {
+        HttpResponseMessage response = await client.DeleteAsync($"Products/{id}");
+        if (!response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            throw new Exception(content);
+        }
+    }
+
 }

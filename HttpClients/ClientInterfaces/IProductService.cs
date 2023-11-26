@@ -21,4 +21,7 @@ public interface IProductService
  
  //get product by id 
  Task<ProductBasicDto> GetByIdAsync(int id);
+ 
+ //delete product
+ Task DeleteAsync(int id);
 }

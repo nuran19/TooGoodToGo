@@ -12,4 +12,7 @@ public interface IProductLogic
   
   // view single post ??????
      Task<ProductBasicDto> GetByIdAsync(int id);
+
+     //delete product
+     Task DeleteAsync(int id);
 }

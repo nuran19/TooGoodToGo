@@ -18,23 +18,23 @@
          @if (doShowFilters)
          {
              <div class="filter">
-                 <label>Username:</label>
+                 <label>Added by: Employee name:</label>
                  <input type="text" @bind="usernameFilter"/>
              </div>
              <div class="filter">
-                 <label>User id:</label>
+                 <label>Employee id:</label>
                  <input type="number" @bind="userIdFilter"/>
              </div>
              <div class="filter">
-                 <label>Subcategory contains:</label>
+                 <label>Product subcategory contains:</label>
                  <input type="text" @bind="subCategoryNameFilter"/>
              </div>
              <div class="filter">
-                 <label>Title contains:</label>
+                 <label>Product name contains:</label>
                  <input type="text" @bind="typeContainsFilter"/>
              </div>
              <div class="filter">
-                 <label>Text contains:</label>
+                 <label>Brand name contains:</label>
                  <input type="text" @bind="brandContainsFilter"/>
              </div>
              <div>
@@ -58,20 +58,17 @@ else
     <table class="table">
         <thead>
         <tr>
-            <th>Products</th>
-           
+            <th>Product Type</th>
+            <th>Brand</th>
         </tr>
         </thead>
         <tbody>
         @foreach (var item in products)
         {
-            @* <tr> *@
-            @*     <td >@item.Title</td> *@
-            @*     <td> <a href="/SingleProduct/@item.Id">View post</a> </td>  <!--??????????add id--> *@
-            @* </tr> *@
             <tr>
                 <td> <a href="/SingleProduct/@item.Id">@item.Type</a> </td>  
-            </tr>
+                <td>@item.Brand</td>
+             </tr>
         }
         </tbody>
     </table>
@@ -86,7 +83,7 @@ else
     public Task<AuthenticationState> AuthState { get; set; } = null!;   //added to remember the logged in claims
     
     
-    private IEnumerable<Product>? products;    //return obj or find way to get id 
+    private IEnumerable<Product>? products;   
     
     private string msg = "";
     

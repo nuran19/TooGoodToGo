@@ -12,7 +12,6 @@ public class Product
     public User Owner { get; private set; }
     public SubCategory SubCategory { get; private set; }
     public int OwnerId { get; set; } //an explicit foreign key,EFC will identify this as an FK because of naming conventions.
-    
     public int CompanyId { get; set; }  
     public int SubCategoryId { get; set; } 
     public string Type { get; private set; }

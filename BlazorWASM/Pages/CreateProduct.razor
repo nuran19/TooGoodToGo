@@ -4,6 +4,8 @@
 @using Domain.DTOs
 @using System.Security.Claims
 @inject IProductService ProductService;
+@inject ICategoryService CatService;
+@inject ISubCategoryService SubCatService;
 @inject NavigationManager navMgr;
 
 @attribute [Authorize] 
@@ -11,39 +13,85 @@
 
 
 <div class="card">
-
-
-    <h3>Create Product</h3>
-
-    <div class="form-group field">
          @* <label>Company id:</label> *@
          @*        <input class="title" type="text" @bind="companyId"/> *@
-        <label>Product Subcategory:</label>
-        <input class="title" type="text" @bind="subCategoryId"/>
-
-        <label>Product Type:</label>
-        <input class="title" type="text" @bind="productType"/>
-
-        <label>Product Brand:</label>
-        <textarea type="text" @bind="productBrand" class="postBody"></textarea>
-        <label>Product Quantity:</label>
-        <textarea type="text" @bind="productQty" class="postBody"></textarea>
-    </div>
-
-    <div class="button-row">
-        @if (!string.IsNullOrEmpty(msg))
-        {
-            <label style="color: red">@msg</label>
-        }
-        <button @onclick="Create" class="acceptbtn">Create</button>
-    </div>
-</div>
-
-@code {
     
+  @if (categories == null)
+    {
+        <label>Loading categories...</label>
+    }
+    else if (!categories.Any())
+    {
+        <label>No categories, you cannot create a product</label>
+    }
+    else
+    {
+        <h3>Add a new Product</h3>
+
+        <div class="form-group field">
+            <div>
+                <label>Product Category:</label>
+                <select @onchange="LoadSubCategories">
+    
+                    @* @bind="categoryId" *@
+                     <option>Choose category</option> 
+                    @foreach (Category category in categories)
+                    {
+                        <option value="@category.Id"> @category.Name </option>
+                    }
+                </select>
+            </div>
+             
+      
+            <div>
+                <label>Product Subcategory:</label>
+                @if (subcategories == null)
+                {
+                    <label > Choose category first...</label>
+                }
+                else if (!subcategories.Any())
+                {
+                    <label>No subcategories, you cannot create a product.Choose another category.</label>
+                }
+                else
+                {
+                    <select @bind="subCategoryId">
+                         <option>Choose subcategory</option> 
+                        @foreach (SubCategory subcategory in subcategories)
+                        {
+                            <option value="@subcategory.Id">@subcategory.Name</option>
+                        }
+                    </select>
+                }
+            </div>
+            <div>
+                <label>Product Type:</label>
+                <input class="title" type="text" @bind="productType"/>
+            
+                <label>Product Brand:</label>
+                <input type="text" @bind="productBrand" class="title"/>
+            
+                <label>Product Quantity in grams:</label>
+                <input type="text" @bind="productQty" class="title"/>
+            </div>
+
+            <div class="button-row">
+                @if (!string.IsNullOrEmpty(msg))
+                {
+                    <label style="color: red">@msg</label>
+                }
+                <button @onclick="Create" class="acceptbtn">SAVE</button>
+
+            </div>
+        </div>
+    
+    }    
+</div>
+@code {
+
 
     [CascadingParameter]
-    public Task<AuthenticationState> AuthState { get; set; } = null!;   //add to remember the logged in claims
+    public Task<AuthenticationState> AuthState { get; set; } = null!; //add to remember the logged in claims
 
     private int? userId;
     private int? companyId;
@@ -51,24 +99,53 @@
     private string productType = "";
     private string productBrand = "";
     private int productQty = 0;
-
+    private int categoryId;
     private string msg = "";
 
-    /*  protected override async Task OnInitializedAsync()
+    //drop down
+    private IEnumerable<SubCategory>? subcategories;
+
+
+    private async Task LoadSubCategories(ChangeEventArgs catId)
     {
-        msg = "";
+     string id =  catId.Value.ToString();
+        this.categoryId = int.Parse(id);
         try
         {
-            users = await userService.GetUsers();
+         //   this.categoryId = int.Parse(categoryId);
+            if (this.categoryId != 0)
+            {
+                subcategories = await SubCatService.GetSubCategories(this.categoryId);
+            }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
             msg = e.Message;
         }
-    } 
-    */
+    }
 
+    private IEnumerable<Category>? categories;
+
+    protected override async Task OnInitializedAsync()
+    {
+        msg = "";
+        try
+        {
+            categories = await CatService.GetCategories();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    //  subcategories = await SubCatService.GetSubCategories(categoryId);
+
+
+    ////
     private async Task Create()
     {
         userId = await GetUserIdAsync();
@@ -89,12 +166,17 @@
             msg = "Product type cannot be empty!";
             return;
         }
+    // if (string.IsNullOrEmpty(subCategoryName))
+    // {
+    //     msg = "Product subcat cannot be empty!";
+    //     return;
+    // }
         if (string.IsNullOrEmpty(productBrand))
         {
             msg = "Product brand cannot be empty!";
             return;
         }
-        if (productQty==0)
+        if (productQty == 0)
         {
             msg = "Product quantity cannot be 0!";
             return;
@@ -102,11 +184,11 @@
 
         try
         {
-            ProductCreationDto dto = new(userId.Value, companyId.Value,  subCategoryId, productType, productBrand, productQty);
+            ProductCreationDto dto = new(userId.Value, companyId.Value, subCategoryId, productType, productBrand, productQty);
             var id = await ProductService.CreateAsync(dto);
 
             navMgr.NavigateTo($"/SingleProduct/{id}");
-       //     msg = "Product successfully created";
+    //     msg = "Product successfully created";
         }
         catch (Exception e)
         {
@@ -115,8 +197,10 @@
         }
     }
 
+
+
     //log in remembering claims 
-    private async Task<int?> GetUserIdAsync()   //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
+    private async Task<int?> GetUserIdAsync() //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
     {
         AuthenticationState authState = await AuthState;
         ClaimsPrincipal user = authState.User;
@@ -126,8 +210,9 @@
         int id = int.Parse(idClaim.Value);
         return id;
     }
+
     //log in remembering claims to remember company id
-    private async Task<int?> GetCompanyIdAsync()   //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
+    private async Task<int?> GetCompanyIdAsync() //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
     {
         AuthenticationState authState = await AuthState;
         ClaimsPrincipal user = authState.User;
@@ -137,6 +222,5 @@
         int id = int.Parse(idClaim.Value);
         return id;
     }
-
 
 }
