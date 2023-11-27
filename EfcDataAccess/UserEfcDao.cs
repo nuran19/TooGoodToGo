@@ -1,4 +1,5 @@
 using Application.DaoInterfaces;
+using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -35,4 +36,28 @@ public class UserEfcDao : IUserDao
        User? user = await context.Users.FindAsync(id);
        return user;
     }
+   public async Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
+   {
+       IQueryable<User> usersQuery = context.Users.AsQueryable();
+       if (searchParameters.UsernameContains != null)
+       {
+           usersQuery = usersQuery.Where(u => u.UserName.ToLower().Contains(searchParameters.UsernameContains.ToLower()));
+       }
+
+       IEnumerable<User> result = await usersQuery.ToListAsync();
+       return result;
+   }
+   
+   public async Task DeleteAsync(int userId)
+   {
+       User? existing = await GetByIdAsync(userId);
+       if (existing == null)
+       {
+           throw new Exception($"User with id {userId} not found");
+       }
+
+       context.Users.Remove(existing);
+       await context.SaveChangesAsync();
+   }
+
 }

@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Text;
@@ -18,7 +19,7 @@ public class UserHttpClient : IUserService
     
     //log in 
     public Action<ClaimsPrincipal> OnAuthStateChanged { get; set; } = null!;
-    
+
     public UserHttpClient(HttpClient client) //We request an HttpClient through the constructor, thereby leaving the creation of the HttpClient up to the Blazor framework
     {
         this.client = client;
@@ -37,9 +38,45 @@ public class UserHttpClient : IUserService
         return user;  //Every request returns a response, whether we actually expect an object back or not(success/error message)
     }
 
+    public async Task<IEnumerable<User>> GetUsers(string? usernameContains = null)
+    {
+        string uri = "/users";
+        if (!string.IsNullOrEmpty(usernameContains))
+        {
+            uri += $"?username={usernameContains}";
+        }
+
+        HttpResponseMessage response = await client.GetAsync(uri);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        IEnumerable<User> users = JsonSerializer.Deserialize<IEnumerable<User>>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return users;
+    }
     
-    
-    
+
+    public async Task<IEnumerable<User>?> GetAsync(string? usernameFilter)
+    {
+        try
+        {
+            string url = $"/Users?username={usernameFilter}";
+            
+            var response = await client.GetFromJsonAsync<IEnumerable<User>>(url);
+
+            return response;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            throw;
+        }
+    }
     
    //log in 
      public async Task LoginAsync(string username, string password)
@@ -112,8 +149,7 @@ public class UserHttpClient : IUserService
         ClaimsPrincipal principal = CreateClaimsPrincipal();
         return Task.FromResult(principal);
     }
-
-
+    
    
     private static IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
@@ -137,4 +173,14 @@ public class UserHttpClient : IUserService
 
         return Convert.FromBase64String(base64);
     }
+    public async Task DeleteAsync(int userId)
+    {
+        HttpResponseMessage response = await client.DeleteAsync($"Users/{userId}");
+        if (!response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            throw new Exception(content);
+        }
+    }
+
 }

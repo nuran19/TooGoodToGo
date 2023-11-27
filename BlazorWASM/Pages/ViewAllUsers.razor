@@ -1,0 +1,104 @@
+@page "/ViewAllUsers"
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@inject IUserService UserService
+@inject NavigationManager navMgr
+
+<h3>Users</h3>
+<div class="filter-bar">
+    <div class="filters-container">
+        <label>Looking for something specific, add search filters:</label>
+        <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => doShowFilters = !doShowFilters)" alt="Funnel"/>
+        @if (doShowFilters)
+        {
+            <div class="filter">
+                <label>Username:</label>
+                <input type="text" @bind="usernameFilter"/>
+            </div> 
+            <!-- add more filters if needed -->
+        }
+    </div>
+</div>
+
+<div>
+    <button @onclick="LoadUsers" class="btn">Load</button>
+</div>
+
+@if (users == null)
+{
+}
+else if (!users.Any())
+{
+    <p>No Users to display</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>User ID</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in users)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.UserName</td>
+                <td>@user.Role</td>
+                <td>
+                    <label @onclick="@(() => DeleteUser(user.Id))" style="cursor:pointer; color: red; font-weight: bold"> &#x2717;
+                    </label>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@if (!string.IsNullOrEmpty(msg))
+{
+    <label style="color: red">@msg</label>
+}
+
+@code {
+    private IEnumerable<User>? users;
+    private string msg = "";
+    private bool doShowFilters = false;
+
+    private string? usernameFilter;
+
+    private async Task LoadUsers()
+    {
+        try
+        {
+            users = await UserService.GetAsync(usernameFilter);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private async Task DeleteUser(int userId)
+    {
+        msg = "";
+        try
+        {
+            await UserService.DeleteAsync(userId);
+
+            var list = new List<User>(users!);
+            list.RemoveAll(user => user.Id == userId);
+            users = list.AsEnumerable();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+}
+

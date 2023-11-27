@@ -35,6 +35,20 @@ public class UserLogic : IUserLogic
         
         return created;
     }
+    public Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
+    {
+        return userDao.GetAsync(searchParameters);
+    }
+
+    public async Task DeleteAsync(int userID)
+    {
+        User? todo = await userDao.GetByIdAsync(userID);
+        if (todo == null)
+        {
+            throw new Exception($"User with ID {userID} was not found!");
+        }
+        await userDao.DeleteAsync(userID);
+    }
 
     //just checks the rules of the username
     //The method is static because it is a utility method. It just takes an argument, does something with that and either returns void or some object. We don't use any field variables.

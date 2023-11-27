@@ -13,7 +13,9 @@ namespace WebAPI.Controllers;
 
 public class UsersController : ControllerBase // access to various utility methods.
 {
-    private readonly IUserLogic userLogic; // a field variable, injected through the constructor, so we can get access to the application layer, i.e. the logic.
+    private readonly IUserLogic
+        userLogic; // a field variable, injected through the constructor, so we can get access to the application layer, i.e. the logic.
+
     public UsersController(IUserLogic userLogic)
     {
         this.userLogic = userLogic;
@@ -24,13 +26,16 @@ public class UsersController : ControllerBase // access to various utility metho
     //Web API endpoint which the client can call to create a new User object
 
     [HttpPost] //POST requests to users should hit this endpoint.
-    public async Task<ActionResult<User>> CreateAsync( UserCreationDto dto) // async, to support asynchronous work. The return type is as a consequence a Task. This Task contains an ActionResult with a User inside. 
+    public async Task<ActionResult<User>>
+        CreateAsync(
+            UserCreationDto dto) // async, to support asynchronous work. The return type is as a consequence a Task. This Task contains an ActionResult with a User inside. 
     {
         try
         {
             User user = await userLogic.CreateAsync(dto);
             return
-                Created($"/users/{user.Id}", user); //The resulting User is then returned, with the method Created(), which will create an ActionResult with status code 201, the new path to this specific User (the endpoint of which we haven't made yet, but probably will), and finally the user object is also included
+                Created($"/users/{user.Id}",
+                    user); //The resulting User is then returned, with the method Created(), which will create an ActionResult with status code 201, the new path to this specific User (the endpoint of which we haven't made yet, but probably will), and finally the user object is also included
         } //?????????????????????????????????????????????????????????????????????????????????
         catch (Exception e)
         {
@@ -38,8 +43,39 @@ public class UsersController : ControllerBase // access to various utility metho
             return StatusCode(500, e.Message);
         }
     }
-    
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<User>>> GetAsync([FromQuery] string? username)
+    {
+        try
+        {
+            SearchUserParametersDto parameters = new(username);
+            IEnumerable<User> users = await userLogic.GetAsync(parameters);
+            return Ok(users);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpDelete("{userId:int}")]
+    public async Task<ActionResult> DeleteAsync([FromRoute] int userId)
+    {
+        try
+        {
+            await userLogic.DeleteAsync(userId);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 }
+
 // In our case the server only sets the ID.
 // But in other cases, all kinds of data can be set or modified when creating an object,
 // so generally it is polite to return the result, so the client/user can verify the result.

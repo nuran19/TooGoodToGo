@@ -1,0 +1,94 @@
+.table thead {
+    color: #008080; /* Dark Sage Green */
+}
+.h3 {
+    text-align: center;
+}
+
+/* Filter bar styling */
+.filter-bar {
+    padding: 10px;
+    margin: 15px;
+    background-color: #c1e0d9; /* Light Sage Green */
+    border-radius: 8px;
+}
+
+.funnel {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.filter {
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+}
+
+/* Link styling */
+a {
+    text-decoration: none;
+    color: #008080; /* Dark Sage Green */
+}
+
+a:hover {
+    font-weight: bold;
+}
+
+/* Button styling */
+.btn {
+    background-color: #3a9793; /* Sage Green */
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin: 20px;
+    color: #ffffff; /* White text */
+    border: 2px solid #005b56; /* Dark Sage Green */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #005b56; /* Dark Sage Green on hover */
+}
+
+/* Table styling */
+.table {
+    border-collapse: collapse;
+    border: 1px solid #808080; /* Grey */
+    padding: 15px;
+    width: 100%;
+    text-align: left;
+}
+
+.table th,
+.table td {
+    padding: 15px;
+}
+
+.table tr {
+    background-color: #c1e0d9; /* Light Sage Green */
+}
+
+/* Style the even rows with a light background color */
+.table tbody tr:nth-child(even) {
+    background-color: #d4edeb; /* Lighter Sage Green */
+}
+
+/* Style the odd rows with a different background color */
+.table tbody tr:nth-child(odd) {
+    background-color: #c1e0d9; /* Light Sage Green */
+}
+
+/* Custom styling for delete label */
+.delete-label {
+    cursor: pointer;
+    color: #ff0000; /* Red */
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Error message styling */
+.error-msg {
+    color: #ff0000; /* Red */
+    font-weight: bold;
+}
