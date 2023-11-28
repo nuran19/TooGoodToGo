@@ -1,35 +1,48 @@
+
 @page "/ViewAllUsers"
 @using Domain.Models
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
 @inject IUserService UserService
-@inject NavigationManager navMgr
 
-<h3>Users</h3>
+@attribute [Authorize] 
+@* need to be logged in for access*@
+
+<h1> Users</h1>
+
 <div class="filter-bar">
-    <div class="filters-container">
-        <label>Looking for something specific, add search filters:</label>
-        <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => doShowFilters = !doShowFilters)" alt="Funnel"/>
-        @if (doShowFilters)
-        {
-            <div class="filter">
-                <label>Username:</label>
-                <input type="text" @bind="usernameFilter"/>
-            </div> 
-            <!-- add more filters if needed -->
-        }
-    </div>
+     <div class="filters-container">
+         <label>Looking for someone specific, add search filters:</label>
+         <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => doShowFilters = !doShowFilters)" alt="Funnel"/>
+         @if (doShowFilters)
+         {
+             <div class="filter">
+                 <label>Employee name:</label>
+                 <input type="text" @bind="usernameFilter"/>
+             </div>
+             <div class="filter">
+                 <label>Employee id:</label>
+                 <input type="number" @bind="userIdFilter"/>
+             </div>
+             <div class="filter">
+                 <label>Role:</label>
+                 <input type="text" @bind="roleFilter"/>
+             </div>
+             <div>
+                 <button  @onclick="LoadUsers" class="btn">Search</button>
+             </div>
+         }
+     </div>
+      
 </div>
 
-<div>
-    <button @onclick="LoadUsers" class="btn">Load</button>
-</div>
 
 @if (users == null)
 {
 }
 else if (!users.Any())
 {
-    <p>No Users to display</p>
+    <p>No users to display</p>
 }
 else
 {
@@ -49,10 +62,7 @@ else
                 <td>@user.Id</td>
                 <td>@user.UserName</td>
                 <td>@user.Role</td>
-                <td>
-                    <label @onclick="@(() => DeleteUser(user.Id))" style="cursor:pointer; color: red; font-weight: bold"> &#x2717;
-                    </label>
-                </td>
+                <td><label @onclick="@(() => DeleteUser(user.Id))" style="cursor:pointer; color: red; font-weight: bold"> &#x2717;</label></td>
             </tr>
         }
         </tbody>
@@ -64,17 +74,28 @@ else
 }
 
 @code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!; //added to remember the logged in claims
+
+
     private IEnumerable<User>? users;
+
     private string msg = "";
+
     private bool doShowFilters = false;
-
     private string? usernameFilter;
+    private int? userIdFilter;
+    private string? roleFilter;
 
-    private async Task LoadUsers()
+    protected override async Task OnInitializedAsync() //loading when page opens
     {
+        msg = "";
+
         try
         {
-            users = await UserService.GetAsync(usernameFilter);
+            int? companyId = await GetCompanyIdAsync(); 
+            users = await UserService.GetAsync(usernameFilter, userIdFilter, companyId.Value, roleFilter);
         }
         catch (Exception e)
         {
@@ -83,6 +104,34 @@ else
         }
     }
 
+    private async Task LoadUsers()
+    {
+        try
+        {
+            int? companyId = await GetCompanyIdAsync();
+            users = await UserService.GetAsync(usernameFilter, userIdFilter, companyId.Value, roleFilter);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    //log in remembering claims to remember company id
+    private async Task<int?> GetCompanyIdAsync() 
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+
+        IEnumerable<Claim> claims = user.Claims;
+        Claim idClaim = claims.First(claim => claim.Type.Equals("CompanyId"));
+        int id = int.Parse(idClaim.Value);
+        return id;
+    }
+
+    
+    //delete user by id 
     private async Task DeleteUser(int userId)
     {
         msg = "";
@@ -100,5 +149,5 @@ else
             msg = e.Message;
         }
     }
-}
 
+}

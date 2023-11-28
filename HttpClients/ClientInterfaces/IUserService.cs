@@ -15,7 +15,6 @@ public interface IUserService
     public Task<ClaimsPrincipal> GetAuthAsync();
     public Action<ClaimsPrincipal> OnAuthStateChanged { get; set; }
     
-    Task<IEnumerable<User>> GetUsers(string? usernameContains = null);
-    Task<IEnumerable<User>?> GetAsync(string? usernameFilter);
-    Task DeleteAsync(int userId);
+    Task<ICollection<User>> GetAsync(string? userName, int? userId, int? companyId, string? role); // to get list of users
+    Task DeleteAsync(int userId);  //delete user
 }

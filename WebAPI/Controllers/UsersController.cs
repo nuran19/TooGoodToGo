@@ -13,8 +13,7 @@ namespace WebAPI.Controllers;
 
 public class UsersController : ControllerBase // access to various utility methods.
 {
-    private readonly IUserLogic
-        userLogic; // a field variable, injected through the constructor, so we can get access to the application layer, i.e. the logic.
+    private readonly IUserLogic userLogic; // a field variable, injected through the constructor, so we can get access to the application layer, i.e. the logic.
 
     public UsersController(IUserLogic userLogic)
     {
@@ -26,9 +25,7 @@ public class UsersController : ControllerBase // access to various utility metho
     //Web API endpoint which the client can call to create a new User object
 
     [HttpPost] //POST requests to users should hit this endpoint.
-    public async Task<ActionResult<User>>
-        CreateAsync(
-            UserCreationDto dto) // async, to support asynchronous work. The return type is as a consequence a Task. This Task contains an ActionResult with a User inside. 
+    public async Task<ActionResult<User>> CreateAsync(UserCreationDto dto) // async, to support asynchronous work. The return type is as a consequence a Task. This Task contains an ActionResult with a User inside. 
     {
         try
         {
@@ -43,14 +40,14 @@ public class UsersController : ControllerBase // access to various utility metho
             return StatusCode(500, e.Message);
         }
     }
-
+// /GET request to  users list
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> GetAsync([FromQuery] string? username)
+    public async Task<ActionResult<IEnumerable<User>>> GetAsync([FromQuery] string? userName, [FromQuery] int? userId,[FromQuery] int? companyId, [FromQuery] string? role )
     {
         try
         {
-            SearchUserParametersDto parameters = new(username);
-            IEnumerable<User> users = await userLogic.GetAsync(parameters);
+            SearchUserParametersDto parameters = new(userName,userId,companyId ,role);
+            var users = await userLogic.GetAsync(parameters);
             return Ok(users);
         }
         catch (Exception e)
@@ -59,7 +56,8 @@ public class UsersController : ControllerBase // access to various utility metho
             return StatusCode(500, e.Message);
         }
     }
-
+    
+// DELETE request by id
     [HttpDelete("{userId:int}")]
     public async Task<ActionResult> DeleteAsync([FromRoute] int userId)
     {

@@ -30,24 +30,49 @@ public class UserEfcDao : IUserDao
         return existing;
     }
 
-    //add post 
+  
+   
+   //view users
+   public async Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)  
+   {
+       IQueryable<User> query = context.Users.AsQueryable(); 
+
+       if (!string.IsNullOrEmpty(searchParameters.UsernameContains))
+       {
+           // we know username is unique, so just fetch the first
+           query = query.Where(user =>
+               user.UserName.ToLower().Equals(searchParameters.UsernameContains.ToLower()));
+       }
+
+       if (searchParameters.UserIdContains != null)
+       {
+           query = query.Where(t => t.Id == searchParameters.UserIdContains);
+       }
+       if (searchParameters.CompanyIdContains != null)
+       {
+           query = query.Where(t => t.CompanyId == searchParameters.CompanyIdContains);
+       }
+    
+       if (!string.IsNullOrEmpty(searchParameters.RoleContains))
+       {
+           query = query.Where(t =>
+               t.Role.ToLower().Contains(searchParameters.RoleContains.ToLower()));
+       }
+    
+       List<User> result = await query.ToListAsync(); //executing against the database 
+       return result;
+   }
+
+   
+   
+   //add post 
    public async Task<User?> GetByIdAsync(int id)
    {
        User? user = await context.Users.FindAsync(id);
        return user;
-    }
-   public async Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
-   {
-       IQueryable<User> usersQuery = context.Users.AsQueryable();
-       if (searchParameters.UsernameContains != null)
-       {
-           usersQuery = usersQuery.Where(u => u.UserName.ToLower().Contains(searchParameters.UsernameContains.ToLower()));
-       }
-
-       IEnumerable<User> result = await usersQuery.ToListAsync();
-       return result;
    }
    
+   //delete user 
    public async Task DeleteAsync(int userId)
    {
        User? existing = await GetByIdAsync(userId);

@@ -37,46 +37,59 @@ public class UserHttpClient : IUserService
         User user = JsonSerializer.Deserialize<User>(result, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;  //the result is a User as JSON, and it is deserialized and returned.
         return user;  //Every request returns a response, whether we actually expect an object back or not(success/error message)
     }
+    
 
-    public async Task<IEnumerable<User>> GetUsers(string? usernameContains = null)
+ 
+//list of users 
+    
+    public async Task<ICollection<User>> GetAsync(string? userName, int? userId, int? companyId, string? roleContains)
     {
-        string uri = "/users";
-        if (!string.IsNullOrEmpty(usernameContains))
-        {
-            uri += $"?username={usernameContains}";
-        }
+        string query = ConstructQuery(userName, userId, companyId, roleContains);
+        HttpResponseMessage response = await client.GetAsync("/users" + query);
 
-        HttpResponseMessage response = await client.GetAsync(uri);
-        string result = await response.Content.ReadAsStringAsync();
+        string content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
         {
-            throw new Exception(result);
+            throw new Exception(content);
         }
 
-        IEnumerable<User> users = JsonSerializer.Deserialize<IEnumerable<User>>(result, new JsonSerializerOptions
+        ICollection<User> users = JsonSerializer.Deserialize<ICollection<User>>(content, new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
         })!;
+
         return users;
     }
-    
 
-    public async Task<IEnumerable<User>?> GetAsync(string? usernameFilter)
+    private static string ConstructQuery(string? userName, int? userId, int? companyId, string? roleContains)
     {
-        try
+        string query = "";
+        if (!string.IsNullOrEmpty(userName))
         {
-            string url = $"/Users?username={usernameFilter}";
-            
-            var response = await client.GetFromJsonAsync<IEnumerable<User>>(url);
+            query += $"?username={userName}";
+        }
 
-            return response;
-        }
-        catch (Exception ex)
+        if (userId != null)
         {
-            Console.WriteLine(ex);
-            throw;
+            query += string.IsNullOrEmpty(query) ? "?" : "&";
+            query += $"userid={userId}";
         }
+
+        if (companyId != null)
+        {
+            query += string.IsNullOrEmpty(query) ? "?" : "&";
+            query += $"companyId={companyId}";
+        }
+
+        if (!string.IsNullOrEmpty(roleContains))
+        {
+            query += string.IsNullOrEmpty(query) ? "?" : "&";
+            query += $"roleContains={roleContains}";
+        }
+
+        return query;
     }
+
     
    //log in 
      public async Task LoginAsync(string username, string password)
@@ -173,6 +186,8 @@ public class UserHttpClient : IUserService
 
         return Convert.FromBase64String(base64);
     }
+    
+    //Delete user by id 
     public async Task DeleteAsync(int userId)
     {
         HttpResponseMessage response = await client.DeleteAsync($"Users/{userId}");

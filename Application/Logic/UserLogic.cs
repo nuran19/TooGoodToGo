@@ -35,11 +35,14 @@ public class UserLogic : IUserLogic
         
         return created;
     }
+    
+    
     public Task<IEnumerable<User>> GetAsync(SearchUserParametersDto searchParameters)
     {
-        return userDao.GetAsync(searchParameters);
+        return userDao.GetAsync(searchParameters); //returns a Task, but we don't need to await it, because we do not need the result here. Instead, we actually just returns that task, to be awaited somewhere else.
     }
 
+    //delete user
     public async Task DeleteAsync(int userID)
     {
         User? todo = await userDao.GetByIdAsync(userID);
