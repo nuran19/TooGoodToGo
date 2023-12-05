@@ -37,6 +37,9 @@ builder.Services.AddScoped<ISubCategoryDao, SubCategoryEfcDao>();  //for databas
 builder.Services.AddScoped<ISubCategoryLogic, SubCategoryLogic>();
 
 
+builder.Services.AddScoped<IDayContentDao, DayContentEfcDao>();
+builder.Services.AddScoped<IDayContentLogic, DayContentLogic>();
+builder.Services.AddScoped<IDayContentProductDao, DayContentProductEfcDao>();
 //database 
 builder.Services.AddDbContext<TGTGContext>();
 

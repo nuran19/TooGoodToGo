@@ -24,4 +24,6 @@ public interface IProductService
  
  //delete product
  Task DeleteAsync(int id);
+ 
+ Task<IEnumerable<Product>> GetProducts(int subCatId);
 }

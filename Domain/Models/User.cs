@@ -14,7 +14,8 @@ public class User
     public Company Company { get; set; }
     
     public string Role { get; set;}
-    
+    //two way navigation property -efc
+    [JsonIgnore]
     public ICollection<DayContent> DayContents { get; set; }
     
     //two way navigation property -efc

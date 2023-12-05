@@ -9,9 +9,10 @@ public class SearchProductParametersDto
     public string? SubCategoryContains { get; }
     public string? TypeContains { get;}
     public string? BrandContains { get; }
+    public int? DayContentId { get;  }
     
     
-    public SearchProductParametersDto (string? username, int? userId, int? companyId, string? subCategoryContains, string? typeContains, string? brandContains)
+    public SearchProductParametersDto (string? username, int? userId, int? companyId, string? subCategoryContains, string? typeContains, string? brandContains, int? dayContentId = null)
     {
         Username = username;
         UserId = userId;
@@ -19,6 +20,7 @@ public class SearchProductParametersDto
         SubCategoryContains = subCategoryContains;
         TypeContains = typeContains;
         BrandContains = brandContains;
+        DayContentId = dayContentId;
     }
     
 }

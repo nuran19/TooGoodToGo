@@ -1,0 +1,89 @@
+
+@page "/DayContents/{id:int}"
+@using Domain.DTOs
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using Microsoft.VisualBasic
+@using System.Security.Claims
+@inject IDayContentService DayContentService;
+@inject IProductService ProductService;
+
+@attribute [Authorize] 
+
+<div class="card">
+        
+    <h3>View Day Content Item</h3>
+    
+    @if (dayContentItem != null)
+    {
+        <h4>Id</h4>
+        <p>@dayContentItem.Id</p>
+        <h4>Date</h4>
+        <p>@dayContentItem.Date.ToString()</p>
+
+
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Product Id</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Reason</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var product in dayContentItemProducts)
+            {
+                <tr>
+                    <td>@product.ProductId</td>
+                    <td>@product.ProductName </td>
+                    <td>@product.Quantity</td>
+                    <td>@product.Reason</td>
+
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+     else
+        {
+            <p>DayContent not found.</p>
+        }
+    
+        @if (!string.IsNullOrEmpty(msg))
+        {
+            <p>Error: @msg</p>
+        }
+</div>
+
+@code {
+    
+    [Parameter]
+    
+    public int Id { get; set; }
+
+    private DayContentBasicDto dayContentItem;
+    private ICollection<DayContentProductDetail> dayContentItemProducts = new List<DayContentProductDetail>() {};
+
+    private string msg = "";
+    
+    protected override async Task OnInitializedAsync()  //loading when page opens
+    {
+        
+        try
+        {
+            dayContentItem = await DayContentService.GetByIdAsync(Id);
+          //  dayContentItemProducts = await DayContentService.GetProductsAsync(Id);
+            dayContentItemProducts = await DayContentService.GetDayContentDetailAsync(Id);
+            
+            //Console.WriteLine($"Received {dayContentItemProducts.Count} products for day content {Id}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+}

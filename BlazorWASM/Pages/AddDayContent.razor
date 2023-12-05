@@ -1,0 +1,181 @@
+@page "/AddDayContent"
+
+@using HttpClients.ClientInterfaces
+@using Domain.Models
+@using System.Security.Claims
+@using Domain.DTOs
+@inject IProductService ProductService 
+@inject IDayContentService DayContentService 
+@inject NavigationManager navMgr;
+@inject AuthenticationStateProvider auth;
+@* @attribute [Authorize]  *@
+
+
+<h3>Add Day Content</h3>
+<div class="card">
+    <div class="form-group field" style="padding: 5px; margin:  5px">
+        <div>
+            <label>Date:</label>
+            <label>@today</label>
+        </div>
+        <div>
+            <label>User</label>
+            <label>@username</label>
+        </div>
+        <div style="border:1px solid lightseagreen; padding: 5px; margin: 5px">
+            <div>
+                <label>Add products for this day content...</label>
+            </div>
+            <div style="padding: 5px; margin: 10px">
+                <label>Select Product</label>
+                <select  id="ProductDropDown" @onchange="ProductIsChanged">
+                    <option>Choose Product</option> 
+                    @foreach (Product product in products ?? Enumerable.Empty<Product>())
+                    {
+                        <option value="@product.Id">@product.Type</option>
+                    }
+                </select>
+            </div>
+            <div style="padding: 5px; margin: 10px">
+                <label>Add quantity</label>
+                <input class="title" type="text" @bind="quantity"/>
+            </div>
+            <div style="padding: 5px; margin: 10px">
+                <label>Reason</label>
+                <input class="title" type="text" @bind="reason"/>
+            </div>
+            <div class="button-row" style="padding: 5px; margin: 10px">  
+                <button class="acceptbtn" @onclick="(async () => await AddProduct())">
+                   Add Product
+                </button>
+
+            </div>
+            <div style="padding: 5px; margin: 10px">
+                @if (productAdded)
+                {
+                    <table id="prodcutTable" class="table" style="padding: 5px; border: 1px solid grey">
+                        <tr>
+                            <th> Product ID </th>
+                            <th> Product Name </th>
+                            <th> Quantity </th>
+                            <th> Reason </th>
+                        </tr>
+                        @foreach(DCProduct dcProdcut in dayContentProducts)
+                          {
+                              <tr>
+                                  <td>@dcProdcut.productId</td>
+                                  <td>@dcProdcut.productName</td>
+                                  <td>@dcProdcut.quantity</td>
+                                  <td>@dcProdcut.reason</td>
+                                  <td>
+                                      <button @onclick="() => dayContentProducts.Remove(dcProdcut)">
+                                          X
+                                      </button>
+                                  </td>
+                              </tr>
+                          }
+                    </table>
+                }
+            </div>
+        </div> 
+    
+        <div class="button-row" style="padding: 5px; margin: 10px"> 
+            <button @onclick="Create" class="acceptbtn">Creat Day Content</button> 
+        </div>
+        <div>
+        @if (!string.IsNullOrEmpty(msg))
+            {
+                <label style="color: red">@msg</label>
+            }
+        </div>
+    
+        </div>
+</div>
+
+@code{
+    /*[Inject] */
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+    private string username;
+    private int? userId;
+    private int? companyId;
+    private DateOnly today = DateOnly.FromDateTime(DateTime.Now); 
+    
+    // used in products drop down
+    private IEnumerable<Product>? products;
+    
+    // For products table
+    private int productId;
+    private string productName="";
+    private int quantity;
+    private string reason;
+    private List<DCProduct> dayContentProducts = new List<DCProduct>(); // used for display only
+    private ICollection<DayContentProduct> dayContentProductsNew = new List<DayContentProduct>(); // used in save day content request
+    private bool productAdded = false;
+    private ProductBasicDto selectedProduct;
+    
+    private string msg = "";
+  
+    
+    protected override async Task OnInitializedAsync()
+    { 
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+        username = user.Identity!.Name!;
+        userId =int.Parse(auth.GetAuthenticationStateAsync().Result.User.Claims.Single(x => x.Type == "UserId").Value);
+        companyId = int.Parse(auth.GetAuthenticationStateAsync().Result.User.Claims.Single(x => x.Type == "CompanyId").Value); 
+        products = await ProductService.GetAsync(null,userId,companyId,null,null,null);
+    }
+
+    private void ProductIsChanged(ChangeEventArgs args)
+    {
+        productId = int.Parse(args.Value.ToString());
+        productName= products.ToList().FirstOrDefault(p => p.Id == productId).Type; 
+    }
+    
+    private async Task AddProduct()
+    {
+        productAdded = true; 
+        dayContentProducts.Add(new DCProduct(productId, productName, quantity, reason));  
+
+    // Clear input fields
+        productId = 0;
+        quantity = 0;
+        reason = "";
+    
+    }
+
+    // Creating a Day Content with products
+    private async Task Create()
+    {
+        
+        foreach (var dcProduct in dayContentProducts)
+        {
+            Console.WriteLine(dcProduct.productName);
+            dayContentProductsNew.Add(new DayContentProduct(0,dcProduct.productId, dcProduct.quantity, dcProduct.reason));
+        }
+        
+        
+        DayContentCreationDto dto = new(userId.Value, today, dayContentProductsNew);
+        var id = await DayContentService.CreateAsync(dto);
+        
+        
+        navMgr.NavigateTo($"/DayContents/{id}");
+        
+    }
+   public class DCProduct
+    {
+       public int productId;
+       public string productName;
+       public int quantity;
+       public string reason;
+       
+        public DCProduct(int productId, string productName, int quantity, string reason)
+        {
+            this.productId = productId;
+            this.productName = productName;
+            this.quantity = quantity;
+            this.reason = reason;
+        } 
+    }
+}

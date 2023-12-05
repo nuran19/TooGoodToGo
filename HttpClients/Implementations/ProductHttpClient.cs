@@ -56,7 +56,7 @@ public class ProductHttpClient : IProductService
     //search products with filtering  
     //It will check each filter argument, check if they are not null, in which case they should be ignore.
     //And otherwise include the needed filter argument in the query parameter string.
-    private static string ConstructQuery(string? userName, int? userId, int?companyId,  string? subCategoryContains, string? typeContains, string? brandContains )
+    private static string ConstructQuery(string? userName, int? userId, int?companyId,  string? subCategoryContains, string? typeContains, string? brandContains, int? dayContentId = null)
     {
         string query = "";
         if (!string.IsNullOrEmpty(userName))
@@ -89,6 +89,12 @@ public class ProductHttpClient : IProductService
         {
             query += string.IsNullOrEmpty(query) ? "?" : "&";
             query += $"brandContains={brandContains}";
+        }
+        
+        if (dayContentId != null)
+        {
+            query += string.IsNullOrEmpty(query) ? "?" : "&";
+            query += $"dayContentId={dayContentId}";
         }
 
         return query;
@@ -124,6 +130,29 @@ public class ProductHttpClient : IProductService
             string content = await response.Content.ReadAsStringAsync();
             throw new Exception(content);
         }
+    }
+    
+    //Get products method
+
+    public async Task<IEnumerable<Product>> GetProducts(int subCatId)
+    {
+        string uri = "/products";
+        if (subCatId != 0)
+        {
+            uri += $"?subCategoryId={subCatId}";
+        }
+        HttpResponseMessage response = await client.GetAsync(uri);
+        string result = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new Exception(result);
+        }
+
+        IEnumerable<Product> products = JsonSerializer.Deserialize<IEnumerable<Product>>(result, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        })!;
+        return products;
     }
 
 }

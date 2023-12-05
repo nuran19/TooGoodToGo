@@ -3,6 +3,7 @@ using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace EfcDataAccess;
 
@@ -57,6 +58,20 @@ public class ProductEfcDao : IProductDao
         {
             query = query.Where(t =>
                 t.Brand.ToLower().Contains(searchParameters.BrandContains.ToLower()));
+        }
+
+        if (searchParameters.DayContentId != null)
+        {
+            // Get all productIds relating to the given dayContentId
+            List<int> productIds = context.DayContentProduct
+                .Where(dcp => dcp.DayContentId == searchParameters.DayContentId)
+                .Select(dcp => dcp.ProductId)
+                .Distinct()
+                .ToList();
+            
+            // Filter products query to only return products where the ID
+            // relates to our dayContentId
+            query = query.Where(prod => productIds.Contains(prod.Id));
         }
         
         List<Product> result = await query.ToListAsync(); //executing against the database 

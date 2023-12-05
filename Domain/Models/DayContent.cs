@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 using Domain.Models;
 
 
@@ -9,24 +10,29 @@ namespace Shared.Models;
 public class DayContent
 {
     [Key]
-    public int Id { get; set; }
+    public int Id { get; set; } 
     
     public DateOnly Date { get; set; }
     
-    public string? Reason { get; set; }
-    public int Quantity { get; set; } //Product's quantity
+    public User Owner { get; private set; }
     
-
-    public ICollection<Product> Products { get; set; }
-    public ICollection<User> Users { get; set; }
-
-
-    public DayContent(int quantity,  string reason)
+    public int UserId { get; set; }
+    
+    public virtual ICollection<DayContentProduct> DayContentProducts { get; set; } = new List<DayContentProduct>(); 
+    
+    
+    public DayContent(int userId)
     {
-        Quantity = quantity;
-        Date = DateOnly.FromDateTime(DateTime.Now);
-        Reason = reason;
+        Date = DateOnly.FromDateTime(DateTime.Now); 
+        UserId = userId;
     }
 
-    private DayContent() {}
+    public DayContent(int userId, DateOnly date, ICollection<DayContentProduct> dayContentProducts)
+    {
+        UserId = userId;
+        Date = date;
+        DayContentProducts = dayContentProducts;
+    }
+
+    public DayContent() {}
 }

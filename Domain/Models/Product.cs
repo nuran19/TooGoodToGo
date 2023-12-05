@@ -18,8 +18,8 @@ public class Product
     public string Brand { get; private set; }
     public int Qty { get; private set; }
     public bool? IsEco { get; private set; } //??priv set??  //initially false by not setting
-    
-    public ICollection<DayContent> DayContents { get; set; }
+    //[NotMapped]
+    //public ICollection<DayContent> DayContents { get; set; }
     
     
     //????for creating products error added jsonConstructor

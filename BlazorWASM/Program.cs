@@ -20,7 +20,8 @@ builder.Services.AddScoped<IProductService, ProductHttpClient>();
 builder.Services.AddScoped<ICategoryService, CategoryHttpClient>();
 //subcat 
  builder.Services.AddScoped<ISubCategoryService, SubCategoryHttpClient>();
-
+//create dayContent
+builder.Services.AddScoped<IDayContentService, DayContentHttpClient>();
 //log in auth
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
 AuthorizationPolicies.AddPolicies(builder.Services);

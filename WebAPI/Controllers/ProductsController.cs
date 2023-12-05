@@ -59,8 +59,7 @@ public class ProductsController : ControllerBase
  //endpoint
  //return list of titles after search of specific criteria
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Product>>> GetAsync([FromQuery] string? userName, [FromQuery] int? userId, [FromQuery]int? companyId, [FromQuery] string? subCategoryContains,   [FromQuery] string? typeContains, [FromQuery] string? brandContains)
-    {
+    public async Task<ActionResult<IEnumerable<Product>>> GetAsync([FromQuery] string? userName, [FromQuery] int? userId, [FromQuery]int? companyId, [FromQuery] string? subCategoryContains,   [FromQuery] string? typeContains, [FromQuery] string? brandContains) {
         try
         {
             SearchProductParametersDto parameters = new ( userName, userId, companyId, subCategoryContains, typeContains, brandContains);
