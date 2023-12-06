@@ -15,4 +15,7 @@ public interface IProductDao
   
     //delete product
     Task DeleteAsync(int id);
+    
+    //drop down product
+    Task<IEnumerable<Product>> GetProducts(int subCategoryId);
 }

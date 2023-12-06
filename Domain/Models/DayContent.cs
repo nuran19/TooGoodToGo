@@ -18,6 +18,8 @@ public class DayContent
     
     public int UserId { get; set; }
     
+    //navigation DATA ANALYSIS
+    [JsonIgnore]
     public virtual ICollection<DayContentProduct> DayContentProducts { get; set; } = new List<DayContentProduct>(); 
     
     
@@ -26,7 +28,8 @@ public class DayContent
         Date = DateOnly.FromDateTime(DateTime.Now); 
         UserId = userId;
     }
-
+    
+   // [JsonConstructor]
     public DayContent(int userId, DateOnly date, ICollection<DayContentProduct> dayContentProducts)
     {
         UserId = userId;

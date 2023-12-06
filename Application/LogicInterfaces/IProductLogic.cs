@@ -15,4 +15,7 @@ public interface IProductLogic
 
      //delete product
      Task DeleteAsync(int id);
+     
+     //drop down products
+     Task<IEnumerable<Product>> GetProducts(int subCategoryId);
 }

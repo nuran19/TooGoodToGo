@@ -22,6 +22,8 @@ builder.Services.AddScoped<ICategoryService, CategoryHttpClient>();
  builder.Services.AddScoped<ISubCategoryService, SubCategoryHttpClient>();
 //create dayContent
 builder.Services.AddScoped<IDayContentService, DayContentHttpClient>();
+//chart
+builder.Services.AddScoped<IChartService, ChartHttpClient >();
 //log in auth
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
 AuthorizationPolicies.AddPolicies(builder.Services);

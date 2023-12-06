@@ -40,6 +40,11 @@ builder.Services.AddScoped<ISubCategoryLogic, SubCategoryLogic>();
 builder.Services.AddScoped<IDayContentDao, DayContentEfcDao>();
 builder.Services.AddScoped<IDayContentLogic, DayContentLogic>();
 builder.Services.AddScoped<IDayContentProductDao, DayContentProductEfcDao>();
+
+//chart 
+builder.Services.AddScoped<IChartDao, ChartEfcDao>();  //for database 
+builder.Services.AddScoped<IChartLogic, ChartLogic>();
+
 //database 
 builder.Services.AddDbContext<TGTGContext>();
 

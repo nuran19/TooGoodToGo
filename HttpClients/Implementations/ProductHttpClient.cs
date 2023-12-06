@@ -133,7 +133,6 @@ public class ProductHttpClient : IProductService
     }
     
     //Get products method
-
     public async Task<IEnumerable<Product>> GetProducts(int subCatId)
     {
         string uri = "/products";
@@ -155,4 +154,5 @@ public class ProductHttpClient : IProductService
         return products;
     }
 
+    
 }

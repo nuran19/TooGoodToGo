@@ -1,0 +1,669 @@
+ @page "/Chart"
+ @using System.Security.Claims
+ @using System.Globalization
+ @using Domain.Models
+ @using HttpClients.ClientInterfaces
+ @inject ICategoryService CatService;
+ @inject ISubCategoryService SubCatService;
+ @inject IChartService ChartService;
+  @inject IProductService ProductService;
+ 
+ @attribute [Authorize] 
+ 
+ <h3>Product quantity per item in Surprise Bags in a year</h3>
+   <h5>Select a product in order to view the quantity for a specific year.</h5>
+ 
+  <div class="form-group field"> 
+      @if (categories == null)
+         {
+             <label>Loading categories...</label>
+         }
+         else if (!categories.Any())
+         {
+             <label>No categories, you cannot create a product</label>
+         }
+         else
+         {
+             <label>Product Category:</label>
+             <select @onchange="LoadSubCategories">
+                 <option>Choose category</option>
+                 @foreach (Category category in categories!)
+                 {
+                     <option value="@category.Id"> @category.Name </option>
+                 }
+             </select>
+         }
+ 
+             <div>
+             
+                 @if (subcategories == null)
+                 {
+                     <label > Choose category first...</label>
+                 }
+                 else if (!subcategories.Any())
+                 {
+                     <label>No subcategories, you cannot create product analysis.Choose another category.</label>
+                 }
+                 else
+                 {
+                     <label>Product Subcategory:</label>
+                     <select  @onchange="LoadProducts" >
+                         <option>Choose subcategory</option>
+                         @foreach (SubCategory subcategory in subcategories)
+                         {
+                             <option value="@subcategory.Id">@subcategory.Name</option>
+                         }
+                     </select>
+                 }
+             </div>
+
+            <div>
+                 
+                  @if (products == null)
+                  {
+                      <label > Choose subcategory first...</label>
+                  }
+                  else if (!products.Any())
+                  {
+                      <label>No products, you cannot create product analysis.Choose another subcategory.</label>
+                  }
+                  else
+                  {
+                      <label>Product :</label>
+                      <select @bind="productType">
+                          <option>Choose product</option>
+                          @foreach (Product product in products)
+                          {
+                              if (product.CompanyId == companyId)
+                              {
+                                  <option value="@product.Type">@product.Type</option>
+                              }
+                          }
+                      </select>
+                  }
+             </div>
+      
+             <label>Year:</label>
+      <input class="title" type="text" @bind="dateYear"/>
+      
+      
+      <div class="button-row">
+                 @if (!string.IsNullOrEmpty(msg))
+                 {
+                     <label style="color: red">@msg</label>
+                 }
+                 <button @onclick="GetData" class="acceptbtn">Load Data</button>
+             </div>
+      
+
+                 <div class="container">
+                     <div class="row">
+                         <div class="col-sm-12 my-5">
+                         <RadzenCard class="w-100 mb-4" Style="display: flex; align-items: center; gap: 0.5rem" >
+                             <RadzenCheckBox @bind-Value="@smooth" Name="smooth"></RadzenCheckBox>
+                             <RadzenLabel Text="Smooth" For="smooth" Style="margin-right: 1rem;"/>
+                             <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                             <RadzenLabel Text="Show Data Labels" For="dataLabels" />
+                         </RadzenCard>
+                         
+                          <RadzenChart>   
+                         <RadzenLineSeries Smooth="@smooth" Data="@myCollection" CategoryProperty="month" Title="@dateYear" LineType="LineType.Dashed" ValueProperty="quantity">
+                     <RadzenMarkers MarkerType="MarkerType.Square"/>
+                     <RadzenSeriesDataLabels Visible="@showDataLabels"/>
+                 </RadzenLineSeries>
+
+                            
+
+                              <RadzenCategoryAxis Padding="20"/>
+                 <RadzenValueAxis>
+                     <RadzenGridLines Visible="true"/>
+                     <RadzenAxisTitle Text="Quantity in pieces of product"/>
+                 </RadzenValueAxis>
+             </RadzenChart>
+         </div>
+     </div>
+     </div>
+</div>
+
+ @* Product per year total kgrams //////////////////////////////////////////////////////////*@
+ <div>
+ <h3>Total Quantity in KG of product sold through TGTG in a year</h3>
+    <h5>Select a product in order to view the total quantity in kilograms for a specific year.</h5>
+ <div class="form-group field"> 
+     @if (categoriesGr == null)
+     {
+         <label>Loading categories...</label>
+     }
+     else if (!categoriesGr.Any())
+     {
+         <label>No categories, you cannot create a product</label>
+     }
+     else
+     {
+         <label>Product Category:</label>
+         <select @onchange="LoadSubCategoriesTwo">
+             <option>Choose category</option>
+             @foreach (Category categoryGr in categoriesGr!)
+             {
+                 <option value="@categoryGr.Id"> @categoryGr.Name </option>
+             }
+         </select>
+     }
+  
+     <div>
+              
+         @if (subcategoriesGr == null)
+         {
+             <label > Choose category first...</label>
+         }
+         else if (!subcategoriesGr.Any())
+         {
+             <label>No subcategories, you cannot create product analysis.Choose another category.</label>
+         }
+         else
+         {
+             <label>Product Subcategory:</label>
+             <select  @onchange="LoadProductsTwo" >
+                 <option>Choose subcategory</option>
+                 @foreach (SubCategory subcategoryGr in subcategoriesGr)
+                 {
+                     <option value="@subcategoryGr.Id">@subcategoryGr.Name</option>
+                 }
+             </select>
+         }
+     </div>
+ 
+     <div>
+                  
+         @if (productsGr == null)
+         {
+             <label > Choose subcategory first...</label>
+         }
+         else if (!productsGr.Any())
+         {
+             <label>No products, you cannot create product analysis.Choose another subcategory.</label>
+         }
+         else
+         {
+             <label>Product :</label>
+             <select @bind="productTypeGr">
+                 <option>Choose product</option>
+                 @foreach (Product productGr in productsGr)
+                 {
+                     if (productGr.CompanyId == companyId)
+                     {
+                         <option value="@productGr.Type">@productGr.Type</option>
+                     }
+                 }
+             </select>
+         }
+     </div>
+       
+     <label>Year:</label>
+     <input class="title" type="text" @bind="dateYearGr"/>
+       
+       
+     <div class="button-row">
+         @if (!string.IsNullOrEmpty(msg))
+         {
+             <label style="color: red">@msg</label>
+         }
+         <button @onclick="GetDataGr" class="acceptbtn">Load Data</button>
+     </div>
+       
+     <div class="container">
+         <div class="row">
+             <div class="col-sm-12 my-5">
+                 <RadzenCard class="w-100 mb-4" >
+                     <RadzenCheckBox @bind-Value="@showDataLabelsGr" Name="dataLabels"></RadzenCheckBox>
+                     <RadzenLabel Text="Show Data Labels" For="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
+                 </RadzenCard>
+             
+                 <RadzenChart>
+                     <RadzenColumnSeries Data="@myCollectionGr" CategoryProperty="monthGr" Title="@dateYearGr" LineType="LineType.Dashed" ValueProperty="quantityGr">
+                         <RadzenSeriesDataLabels Visible="@showDataLabelsGr" />
+                     </RadzenColumnSeries>
+                        
+                     <RadzenColumnOptions Radius="5" Width="20" />
+                     <RadzenCategoryAxis Padding="20" />
+                     <RadzenValueAxis >
+                         <RadzenGridLines Visible="true" />
+                         <RadzenAxisTitle Text="Quantity in KG of product" />
+                     </RadzenValueAxis>
+                 </RadzenChart>
+             </div>
+         </div>
+     </div>
+ </div>
+ </div>
+ 
+ @* //Pie chart/////////////////////////// *@
+ <div>
+  <h3>Sum per year of reasons why products were added to the TGTG Surprise Bag</h3>
+     <h5>Select a year in order to have an overview of reasons.</h5>
+    <label>Year:</label>
+ <input class="title" type="text" @bind="dateYearMore"/>
+ 
+  <div class="button-row">
+          @if (!string.IsNullOrEmpty(msg))
+          {
+              <label style="color: red">@msg</label>
+          }
+          <button @onclick="GetDataMore" class="acceptbtn">Load Data</button>
+      </div>
+ 
+ <div class="container">
+     <div class="row">
+         <div class="col-sm-12 col-lg-6 offset-lg-3 my-5">
+             <RadzenCard class="w-100 mb-4" >
+                 <RadzenCheckBox @bind-Value="@showDataLabels3" Name="dataLabels"></RadzenCheckBox>
+                 <RadzenLabel Text="Show Data Labels" For="dataLabels" Style="margin-left: 8px; vertical-align: middle;" />
+             </RadzenCard>
+             <RadzenChart >
+                 <RadzenPieSeries Data="@myCollectionMore" Title="Sum/year:" CategoryProperty="reasonMore" ValueProperty="sum">
+                     <RadzenSeriesDataLabels Visible="@showDataLabels3" />
+                 </RadzenPieSeries>
+             </RadzenChart>
+         </div>
+     </div>
+ </div>
+ </div>
+
+ @code {
+     
+    bool smooth = false;
+    bool showDataLabels = false;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!; //added to remember the logged in claims
+
+     private int? companyId;
+    private DateOnly? date; //add specific year
+
+    private string dateYear;
+     
+     
+    private string? productType;
+    private string? category;
+    private string? subcategory;
+   private string? reason;
+    private int? dayQuantity;
+    private int categoryId;
+    private int subCategoryId;
+    private int productId;
+    private string? msg = "";
+   private List<DayContentProduct>? dayContentProducts;
+    //drop down
+    private IEnumerable<Category>? categories;
+    private IEnumerable<SubCategory>? subcategories;
+    private IEnumerable<Product>? products;
+
+    private async Task LoadSubCategories(ChangeEventArgs catId)
+    {
+        string id = catId.Value.ToString();
+        this.categoryId = int.Parse(id);
+        try
+        {
+    //   this.categoryId = int.Parse(categoryId);
+            if (this.categoryId != 0)
+            {
+                subcategories = await SubCatService.GetSubCategories(this.categoryId);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    private async Task LoadProducts(ChangeEventArgs subcatId)
+    {
+        companyId =await GetCompanyIdAsync();
+        string id = subcatId.Value.ToString();
+        this.subCategoryId = int.Parse(id);
+        try
+        {
+            if (this.subCategoryId != 0)
+            {
+                products = await ProductService.GetProducts(this.subCategoryId);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        msg = "";
+        try
+        {
+            
+            categories = await CatService.GetCategories();
+            categoriesGr= await CatService.GetCategories();
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+
+
+    //log in remembering claims to remember company id
+    private async Task<int?> GetCompanyIdAsync() 
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
+
+        IEnumerable<Claim> claims = user.Claims;
+        Claim idClaim = claims.First(claim => claim.Type.Equals("CompanyId"));
+        int id = int.Parse(idClaim.Value);
+        return id;
+    }
+
+    
+    private async Task LoadDayContentProducts()
+    {
+        try
+        {
+            companyId = await GetCompanyIdAsync();
+            IEnumerable<DayContentProduct> result =await ChartService.GetAsync(companyId.Value, productType); 
+            dayContentProducts = new List<DayContentProduct>();
+            foreach (DayContentProduct prod in result)
+            {
+                if (int.Parse(dateYear) == FormatAsYear(prod.DayContent.Date)) 
+                {
+                    dayContentProducts.Add(prod);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+     
+
+    //  calculation of product quantity per month , year was previously selected
+    public Dictionary<string, int> CalcProdPerMonth()
+    {
+        LoadDayContentProducts();
+        Dictionary<string, int> results = new Dictionary<string, int>();
+        if (dayContentProducts != null)
+        {
+            foreach (DayContentProduct content in dayContentProducts)
+            {
+                string month = FormatAsMonth(content.DayContent.Date);
+                int contentSum = 0;
+                if (results.ContainsKey(month))
+                {
+                    contentSum = results[month];
+                }
+                contentSum += content.Quantity;
+                results[month]= contentSum;
+            }
+        }
+        return results;
+    }
+
+    public string FormatAsMonth(DateOnly value)
+    {
+        if (value != null)
+        {
+            return value.ToString("MMMM");
+        }
+
+        return string.Empty;
+    }
+
+    public int FormatAsYear(DateOnly value)
+    {
+        if (value != null)
+        {
+            return (value.Year);
+        }
+
+        return 0;
+    }
+     
+
+    //setting data in a format recognised by the chart
+
+    IList<DataItem> myCollection = new List<DataItem>();
+
+     public void GetData() 
+     {
+         try
+         {
+             myCollection = new List<DataItem>();
+             Dictionary<string, int> calculations = CalcProdPerMonth();
+             foreach (KeyValuePair<string, int> calculation in calculations)
+             {
+                 myCollection.Add(new DataItem() { month = calculation.Key, quantity = calculation.Value });
+             }
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e);
+             msg = e.Message;
+         }
+     }
+
+     class DataItem
+    {
+        public string month { get; set; }
+        public int quantity { get; set; }
+    }
+     
+     
+     
+    ////////////////////////// //new chart///////////////////////////// total grams of product per month//////////////////////////
+     bool showDataLabelsGr = false;
+     private string dateYearGr;
+     private string? productTypeGr;
+     private List<DayContentProduct>? dayContentProductsGr;
+     //drop down
+     private IEnumerable<Category>? categoriesGr;
+     private IEnumerable<SubCategory>? subcategoriesGr;
+     private IEnumerable<Product>? productsGr;
+     
+     private async Task LoadSubCategoriesTwo(ChangeEventArgs catId)
+     {
+         string id = catId.Value.ToString();
+         this.categoryId = int.Parse(id);
+         try
+         {
+             if (this.categoryId != 0)
+             {
+                 subcategoriesGr = await SubCatService.GetSubCategories(this.categoryId);
+             }
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e);
+             msg = e.Message;
+         }
+     }
+
+     private async Task LoadProductsTwo(ChangeEventArgs subcatId)
+     {
+         companyId =await GetCompanyIdAsync();
+         string id = subcatId.Value.ToString();
+         this.subCategoryId = int.Parse(id);
+         try
+         {
+             if (this.subCategoryId != 0)
+             {
+                 productsGr = await ProductService.GetProducts(this.subCategoryId);
+             }
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e);
+             msg = e.Message;
+         }
+     }
+
+     
+     private async Task LoadDayContentProductsGr()
+     {
+         try
+         {
+             companyId = await GetCompanyIdAsync();
+             IEnumerable<DayContentProduct> result  = await ChartService.GetAsync(companyId.Value, productTypeGr); 
+
+             dayContentProductsGr = new List<DayContentProduct>();
+             foreach (DayContentProduct prod in result)
+             {
+                 if (int.Parse(dateYearGr) == FormatAsYear(prod.DayContent.Date)) 
+                 {
+                     dayContentProductsGr.Add(prod);
+                 }
+             }
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e);
+             msg = e.Message;
+         }
+     }
+     
+     //  calculation of product quantity per month , year was previously selected
+     public Dictionary<string, int> CalcProdPerMonthGr()
+     {
+         LoadDayContentProductsGr();
+         Dictionary<string, int> results = new Dictionary<string, int>();
+         if (dayContentProductsGr != null)
+         {
+             foreach (DayContentProduct content in dayContentProductsGr)
+             {
+                 string month = FormatAsMonth(content.DayContent.Date);
+                 int contentSum = 0;
+                 if (results.ContainsKey(month))
+                 {
+                     contentSum = results[month];
+                 }
+                 contentSum += (content.Quantity * content.Product.Qty)/1000;
+                 results[month]= contentSum;
+             }
+         }
+         return results;
+     }
+
+     //setting data in a format recognised by the chart
+
+     IList<DataItem2> myCollectionGr = new List<DataItem2>();
+
+     public void GetDataGr() 
+     {
+         try
+         {
+             myCollectionGr = new List<DataItem2>();
+             Dictionary<string, int> calculations = CalcProdPerMonthGr();
+             foreach (KeyValuePair<string, int> calculation in calculations)
+             {
+                 myCollectionGr.Add(new DataItem2() { monthGr = calculation.Key, quantityGr = calculation.Value });
+             }
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e);
+             msg = e.Message;
+         }
+     }
+     
+     class DataItem2
+     {
+         public string monthGr { get; set; }
+         public double quantityGr { get; set; }
+     }
+     
+     
+     
+     //new chart /////pie -reason/////////////////////////////////////////////////////////
+
+     private string? productTypeMore;
+     private string dateYearMore;
+     private List<DayContentProduct>? dayContentProductsMore;
+     
+   
+     bool showDataLabels3 = false;
+     
+     
+     class DataItem3
+     {
+         public string? reasonMore { get; set; }
+         public int sum { get; set; }
+     }
+   
+     private async Task LoadDayContentProductsMore()
+     {
+         try
+         {
+             companyId = await GetCompanyIdAsync();
+             IEnumerable<DayContentProduct> result  = await ChartService.GetAsyncMore(companyId.Value, productTypeMore, category, subcategory, reason, dayQuantity, date);
+
+             dayContentProductsMore = new List<DayContentProduct>();
+             foreach (DayContentProduct prod in result)
+             {
+                 if (int.Parse(dateYearMore) == FormatAsYear(prod.DayContent.Date))
+                 {
+                     dayContentProductsMore.Add(prod);
+                 }
+             }
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e);
+             msg = e.Message;
+         }
+     }
+
+     //  calculation of reasons per year , year was previously selected
+     public Dictionary<string, int> CalcReasonsPerYear()
+     {
+         LoadDayContentProductsMore();
+         Dictionary<string, int> results = new Dictionary<string, int>();
+         if (dayContentProductsMore != null)
+         {
+             foreach (DayContentProduct content in dayContentProductsMore)
+             {
+                 string reasonMore = content.Reason;
+                 int contentSum = 0;
+                 if (results.ContainsKey(reasonMore))
+                 {
+                     contentSum = results[reasonMore];
+                 }
+                 contentSum += 1; //change this
+                 results[reasonMore]= contentSum;
+             }
+         }
+         return results;
+     }
+
+     IList<DataItem3> myCollectionMore = new List<DataItem3>();
+
+     public void GetDataMore()
+     {
+         try
+         {
+             myCollectionMore = new List<DataItem3>();
+             Dictionary<string, int> calculations = CalcReasonsPerYear();
+             foreach (KeyValuePair<string, int> calculation in calculations)
+             {
+                 myCollectionMore.Add(new DataItem3() { reasonMore = calculation.Key, sum = calculation.Value });
+             }
+         }
+         catch (Exception e)
+         {
+             Console.WriteLine(e);
+             msg = e.Message;
+         }
+     }
+ }         

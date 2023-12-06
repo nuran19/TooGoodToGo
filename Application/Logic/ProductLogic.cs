@@ -72,4 +72,9 @@ public class ProductLogic : IProductLogic
         await productDao.DeleteAsync(id);
     }
   
+    //drop down
+    public Task<IEnumerable<Product>> GetProducts(int subCategoryId)
+    {
+        return productDao.GetProducts(subCategoryId);
+    }
 }

@@ -102,4 +102,24 @@ public class ProductEfcDao : IProductDao
        await context.SaveChangesAsync();
    }
    
+   //drop down products
+   public async Task<IEnumerable<Product>> GetProducts(int subcatId)
+   {
+       // IQueryable<SubCategory> subCategoriesQuery = context.SubCategory.AsQueryable();
+       // if (searchParameters.CategoryIdContains != null)
+       // {
+       //     subCategoriesQuery = subCategoriesQuery.Where(u => u.CategoryId ==searchParameters.CategoryIdContains);
+       // }
+       // IEnumerable<SubCategory> result = await subCategoriesQuery.ToListAsync();
+       // return result;
+        
+       IQueryable<Product> productsQuery = context.Products.Include (sc => sc.SubCategory).AsQueryable();
+       if ( subcatId != 0)
+       {
+           productsQuery = productsQuery.Where(u => u.SubCategory.Id == subcatId);
+       }
+   
+       List<Product> result = await productsQuery.ToListAsync();
+       return result;
+   }
 }

@@ -9,7 +9,6 @@ public class TGTGContext: DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
-    
     public DbSet<DayContent> DayContent { get; set; }
     public DbSet<SubCategory> SubCategory { get; set; }
     public DbSet<Category> Category { get; set; }
@@ -31,7 +30,7 @@ public class TGTGContext: DbContext
         modelBuilder.Entity<Company>().HasKey(company => company.Id);
         modelBuilder.Entity<SubCategory>().HasKey(subCategory => subCategory.Id);
         modelBuilder.Entity<Category>().HasKey(Category => Category.Id);
-        modelBuilder.Entity<DayContent>().HasIndex(dc => dc.Date).IsUnique();
+       // modelBuilder.Entity<DayContent>().HasIndex(dc => dc.Date).IsUnique();
         modelBuilder.Entity<DayContentProduct>().HasKey(DayContentProduct => new
             { DayContentProduct.DayContentId, DayContentProduct.ProductId });
 

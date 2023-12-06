@@ -104,5 +104,22 @@ public class ProductsController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    //drop down products
+    [HttpGet ("GetProducts")]
+    public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] int subCategoryId)
+    {
+        try
+        {
+            //  SearchSubCategoryParametersDto parameters = new(categoryId);
+            IEnumerable<Product> products = await productLogic.GetProducts(subCategoryId);
+            return Ok (products);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
 
 }

@@ -154,8 +154,6 @@
             Console.WriteLine(dcProduct.productName);
             dayContentProductsNew.Add(new DayContentProduct(0,dcProduct.productId, dcProduct.quantity, dcProduct.reason));
         }
-        
-        
         DayContentCreationDto dto = new(userId.Value, today, dayContentProductsNew);
         var id = await DayContentService.CreateAsync(dto);
         

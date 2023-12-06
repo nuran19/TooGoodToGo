@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using Shared.Models;
 
 namespace Domain.Models;
-// posts keep track of its assignee
+
 //The Product has an Owner, which should reference the User to which this Product is "assigned"
 public class Product
 {
@@ -17,18 +17,15 @@ public class Product
     public string Type { get; private set; }
     public string Brand { get; private set; }
     public int Qty { get; private set; }
-    public bool? IsEco { get; private set; } //??priv set??  //initially false by not setting
-    //[NotMapped]
-    //public ICollection<DayContent> DayContents { get; set; }
+    public bool? IsEco { get; private set; } //initially false by not setting
     
-    
-    //????for creating products error added jsonConstructor
+    //for creating products error added jsonConstructor
     [JsonConstructor]
     public Product(int ownerId,int companyId, int subCategoryId, string type, string brand, int qty)
     {
         OwnerId = ownerId;
         CompanyId = companyId;
-        SubCategoryId = subCategoryId;//?????
+        SubCategoryId = subCategoryId;
         Type = type;
         Brand = brand;
         Qty = qty;
