@@ -89,4 +89,19 @@ public class DayContentLogic : IDayContentLogic
 
         return null;
     }
+    
+    public DayContentLogic(IDayContentDao dayContentDao)
+    {
+        this.dayContentDao = dayContentDao;
+    }
+
+    public async Task<List<DayContent>> GetMonthEntries(int month, int year)
+    {
+        return await dayContentDao.GetMonthEntries(month, year);
+    }
+    
+    public async Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate)
+    {
+        return await dayContentDao.GetEntriesForDateRange(startDate, endDate);
+    }
 }

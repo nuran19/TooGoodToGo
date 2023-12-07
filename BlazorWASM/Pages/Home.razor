@@ -1,6 +1,234 @@
 @page "/"
-<h3>Home</h3>
+@inject NavigationManager NavigationManager
+
+<link href="./home.css" rel="stylesheet" />
+<div class="home-container">
+    <div class="home-hero">
+        <div class="home-hero1">
+            <div class="home-container01">
+                
+                <h1 class="home-hero-heading heading1">
+                    <span class="home-text">LET&apos;S FIGHT</span>
+                    <span></span>
+                    <span class="home-text02">food waste</span>
+                    <span class="home-text03"></span>
+                    <span class="home-text04">TOGETHER</span>
+                </h1>
+                
+                <div class="home-logo-container">
+                    <img src="icons/logo.png" alt="Too Good To Go Logo" class="home-logo-image" />
+                    </div>
+                
+                <span class="home-hero-sub-heading">
+                    To Good To Go  Data Analytics
+                </span>
+                <div class="home-btn-group">
+                    <button class="home-hero-button1 button" @onclick="NavigateToLogin">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="home-features">
+        <div class="home-features-container">
+            <div class="home-features1">
+                <div class="home-container02">
+                    <span class="home-text05 sectionTitle">
+                        <span> NEW FEATURE</span>
+                        <br />
+                    </span>
+                    <h2 class="home-features-heading heading2">
+                        Unlock the Power of Data Analytics
+                    </h2>
+                    <span class="home-features-sub-heading">
+                        Discover the key features that will revolutionize your food waste
+                        management
+                    </span>
+                </div>
+                <div class="home-container03">
+                    <div class="feature-card-feature-card">
+                        <svg viewBox="0 0 1024 1024" class="feature-card-icon">
+                            <path
+                                d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
+                            ></path>
+                        </svg>
+                        <div class="feature-card-container">
+                            <h3 class="feature-card-text heading3">
+                                <span>Data Visualizations</span>
+                            </h3>
+                            <span class="feature-card-text1">
+                                <span>
+                                    Visualize data in various formats for easy understanding
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="feature-card-feature-card">
+                        <svg viewBox="0 0 1024 1024" class="feature-card-icon">
+                            <path
+                                d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
+                            ></path>
+                        </svg>
+                        <div class="feature-card-container">
+                            <h3 class="feature-card-text heading3">
+                                <span>Restocking Patterns</span>
+                            </h3>
+                            <span class="feature-card-text1">
+                                <span>
+                                    Analyze data to identify restocking patterns and optimize
+                                    inventory management
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="home-feature-card">
+                        <svg viewBox="0 0 1024 1024" class="home-icon">
+                            <path
+                                d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
+                            ></path>
+                        </svg>
+                        <div class="home-container04">
+                            <h3 class="home-text08 heading3">Predictive Analytics</h3>
+                            <span class="home-text09">
+                                Utilize predictive analytics to forecast future food waste
+                                patterns and optimize operations
+                            </span>
+                        </div>
+                    </div>
+                    <div class="home-feature-card1">
+                        <svg viewBox="0 0 1024 1024" class="home-icon2">
+                            <path
+                                d="M809.003 291.328l-297.003 171.819-297.003-171.819 275.456-157.397c4.779-2.731 9.899-4.48 15.147-5.333 9.301-1.451 18.987 0.128 27.904 5.291zM491.776 979.669c6.016 3.243 12.928 5.077 20.224 5.077 7.381 0 14.336-1.877 20.395-5.163 15.189-2.475 29.909-7.68 43.392-15.36l298.709-170.709c26.368-15.232 45.269-38.315 55.424-64.597 5.675-14.592 8.619-30.165 8.747-46.251v-341.333c0-20.395-4.821-39.723-13.397-56.917-0.939-3.029-2.219-5.973-3.883-8.832-1.963-3.371-4.267-6.357-6.912-8.96-1.323-1.835-2.731-3.669-4.139-5.419-9.813-12.203-21.845-22.528-35.456-30.507l-299.051-170.88c-26.027-15.019-55.467-19.84-83.328-15.531-15.531 2.432-30.507 7.637-44.288 15.488l-298.709 170.709c-16.341 9.429-29.824 21.888-40.149 36.267-2.56 2.56-4.864 5.547-6.784 8.832-1.664 2.901-2.987 5.888-3.925 8.96-1.707 3.456-3.243 6.955-4.608 10.496-5.632 14.635-8.576 30.208-8.704 45.995v341.632c0.043 30.293 10.581 58.197 28.331 80.128 9.813 12.203 21.845 22.528 35.456 30.507l299.051 170.88c13.824 7.979 28.587 13.099 43.605 15.445zM469.333 537.045v340.949l-277.12-158.336c-4.736-2.773-8.832-6.315-12.16-10.411-5.931-7.381-9.387-16.512-9.387-26.581v-318.379zM554.667 877.995v-340.949l298.667-172.757v318.379c-0.043 5.163-1.067 10.496-2.987 15.445-3.413 8.789-9.6 16.384-18.176 21.333z"
+                            ></path>
+                        </svg>
+                        <div class="home-container05">
+                            <h3 class="home-text10 heading3">Customizable Reports</h3>
+                            <span class="home-text11">
+                                Generate customizable reports to track and measure your
+                                progress
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="home-faq">
+        <div class="home-faq-container">
+            <div class="home-faq1">
+                <div class="home-container06">
+                    <span class="home-text12 sectionTitle">
+                        <span>FAQ</span>
+                        <br />
+                    </span>
+                    <h2 class="home-text15 heading2">Common questions</h2>
+                    <span class="home-text16">
+                        <span>
+                            Here are some of the most common questions that we get.
+                        </span>
+                        <br />
+                        <span>
+                            <span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </span>
+                        <span>
+                            <span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </span>
+                    </span>
+                </div>
+                <div class="home-container07">
+                    <div class="question-container">
+                        <span class="question-text heading4">
+                            <span>
+                                How can Data Analytics help with restocking patterns?
+                            </span>
+                        </span>
+                        <span class="question-text1">
+                            <span>
+                                Data Analytics can help identify trends and patterns in
+                                customer purchasing behavior, allowing businesses to optimize
+                                their restocking strategies and ensure they have the right
+                                inventory levels at the right time.
+                            </span>
+                        </span>
+                    </div>
+                    <div class="question-container">
+                        <span class="question-text heading4">
+                            <span>
+                                What kind of data visualizations are available in the Data
+                                Analytics feature?
+                            </span>
+                        </span>
+                        <span class="question-text1">
+                            <span>
+                                The Data Analytics feature provides various types of
+                                visualizations such as charts, graphs, and dashboards to
+                                present data in a visually appealing and easy-to-understand
+                                format.
+                            </span>
+                        </span>
+                    </div>
+                    <div class="home-container08">
+                        <span class="home-text33 heading4">
+                            Can I track the progress over time with Data Analytics feature?
+                        </span>
+                        <span class="home-text34">
+                            Yes, the Data Analytics feature allows the authorized users to
+                            track the progress over time by providing historical data and
+                            trends on the food waste reduction efforts of the business.
+                        </span>
+                    </div>
+                    <div class="home-container09">
+                        <span class="home-text35 heading4">
+                            Is the Data Analytics feature easy to use for non-technical
+                            users?
+                        </span>
+                        <span class="home-text36">
+                            Yes, the Data Analytics feature is designed to be user-friendly
+                            and intuitive to all the staff members. You don&apos;t need to
+                            have advanced technical skills to navigate and utilize its
+                            functionalities.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="home-footer">
+        <footer class="home-footer1">
+            <div class="home-container10">
+                <span class="home-logo">Too Good To Go</span>
+                <nav class="home-nav"><span class="home-nav2">Support</span></nav>
+            </div>
+            <div class="home-separator"></div>
+            <div class="home-container11">
+                <span class="home-text37">
+                    © 2023 Group 9 I Semester Project 7, All Rights Reserved.
+                </span>
+                <div class="home-icon-group"></div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+
 
 @code {
-    
+    private void NavigateToLogin()
+    {
+    // Navigate to the login page when the button is clicked
+        NavigationManager.NavigateTo("/Login");
+    }
 }

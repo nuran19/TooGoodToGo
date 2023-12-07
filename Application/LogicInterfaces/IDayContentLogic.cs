@@ -18,4 +18,7 @@ public interface IDayContentLogic
     Task<ICollection<DayContentProduct>> GetProductsAsync(int dayContentId);
 
     Task<ICollection<DayContentProductDetail>> GetDayContentDetailAsync(int dayContentId);
+    
+    Task<List<DayContent>> GetMonthEntries(int month, int year);
+    Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate);
 }

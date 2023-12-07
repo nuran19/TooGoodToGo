@@ -12,4 +12,7 @@ public interface IDayContentDao
   
     // view single DayContent ??????
     Task<DayContent?> GetByIdAsync(int dayContentid);
+    
+    Task<List<DayContent>> GetMonthEntries(int month, int year);
+    Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate);
 }

@@ -59,4 +59,24 @@ public class DayContentEfcDao : IDayContentDao
             .SingleOrDefaultAsync(dayContent => dayContent.Id == dayContentid);
         return found;
     }
+    
+    public async Task<List<DayContent>> GetMonthEntries(int month, int year)
+    {
+        var startDate = new DateOnly(year, month, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        return await context.DayContent
+            .Where(entry => entry.Date >= startDate && entry.Date <= endDate)
+            .ToListAsync();
+    }
+
+    public async Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate)
+    {
+        // var startDateOnly = DateOnly.FromDateTime(startDate);
+        // var endDateOnly = DateOnly.FromDateTime(endDate);
+
+        return await context.DayContent
+            .Where(entry => entry.Date >= startDate && entry.Date <= endDate)
+            .ToListAsync();
+    }
 }
