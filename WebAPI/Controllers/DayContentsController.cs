@@ -85,4 +85,68 @@ public class DayContentsController : ControllerBase
         }
     }
     
+    [HttpPatch]
+    //public async Task<ActionResult> UpdateAsync([FromRoute] int id, [FromQuery] List<DayContentProductUpdateDto> dcProductDtos)
+    public async Task<ActionResult> UpdateAsync([FromBody] DayContentUpdateDto dto)
+    {
+        try
+        {
+            Console.WriteLine(dto.Products.Count);
+           await dayContentLogic.UpdateAsync(dto); 
+           //await dayContentLogic.UpdateRelatedProducts(id, dcProductDtos);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpDelete("{id:int}")]
+    public async Task<ActionResult> DeleteAsync([FromRoute] int id, [FromQuery] bool deleteDayContent = false,
+        [FromQuery] List<int> productIdsToDelete = null)
+    {
+        try
+        {
+            await dayContentLogic.DeleteAsync(id, deleteDayContent, productIdsToDelete);
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet("month-entries")]
+    public async Task<ActionResult<List<DayContent>>> GetMonthEntries([FromQuery] int month, [FromQuery] int year)
+    {
+        try
+        {
+            List<DayContent> entries = await dayContentLogic.GetMonthEntries(month, year);
+            return Ok(entries);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet("date-range-entries")]
+    public async Task<ActionResult<List<DayContent>>> GetEntriesForDateRange([FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+    {
+        try
+        {
+            List<DayContent> entries = await dayContentLogic.GetEntriesForDateRange(startDate, endDate);
+            return Ok(entries);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return StatusCode(500, e.Message);
+        }
+    }
+    
 }

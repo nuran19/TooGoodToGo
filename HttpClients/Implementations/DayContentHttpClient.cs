@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using Domain.DTOs;
 using Domain.Models;
@@ -170,7 +171,7 @@ public class DayContentHttpClient : IDayContentService
     public async Task<List<DayContent>> GetMonthEntries(int month, int year)
     {
         string query = $"?month={month}&year={year}";
-        HttpResponseMessage response = await client.GetAsync($"/DayContent/month-entries{query}");
+        HttpResponseMessage response = await client.GetAsync($"/DayContents/month-entries{query}");
         
         string content = await response.Content.ReadAsStringAsync();
         
@@ -190,7 +191,7 @@ public class DayContentHttpClient : IDayContentService
     public async Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly  endDate)
     {
         string query = $"?startDate={startDate.ToString("yyyy-MM-dd")}&endDate={endDate.ToString("yyyy-MM-dd")}";
-        HttpResponseMessage response = await client.GetAsync($"/DayContent/date-range-entries{query}");
+        HttpResponseMessage response = await client.GetAsync($"/DayContents/date-range-entries{query}");
 
         string content = await response.Content.ReadAsStringAsync();
         if (!response.IsSuccessStatusCode)
@@ -205,4 +206,38 @@ public class DayContentHttpClient : IDayContentService
 
         return entries;
     }
+    // if deleteDayContent=true, means delete day content and products else delete only products in the list
+    public async Task DeleteAsync(int id, bool deleteDayContent, List<int> productIds)
+    { 
+        //80?deleteDayContent=false&productIdsToDelete=2&productIdsToDelete=1 
+        string query=$"{id}?deleteDayContent="+deleteDayContent;
+        if (productIds.Any())
+        {
+            foreach (var pID in productIds)
+            {
+                query += "&productIdsToDelete=" + pID;
+            }
+           
+        }
+        HttpResponseMessage response = await client.DeleteAsync($"DayContents/"+query);
+        if (!response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            throw new Exception(content);
+        }
+    }
+
+    public async Task UpdateAsync(DayContentUpdateDto dto)
+    {
+      
+        string dtoAsJson = JsonSerializer.Serialize(dto);
+        StringContent body = new StringContent(dtoAsJson, Encoding.UTF8, "application/json");
+        HttpResponseMessage response = await client.PatchAsync($"/DayContents", body);
+        if (!response.IsSuccessStatusCode)
+        {
+            string content = await response.Content.ReadAsStringAsync();
+            throw new Exception(content);
+        }
+    }
+
 }

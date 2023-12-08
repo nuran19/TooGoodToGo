@@ -29,4 +29,7 @@ public interface IDayContentService
     
     Task<List<DayContent>> GetMonthEntries(int month, int year);
     Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate);
+    
+    Task DeleteAsync(int id, bool deleteDayContent, List<int> productIds);
+    Task UpdateAsync(DayContentUpdateDto dto);
 }

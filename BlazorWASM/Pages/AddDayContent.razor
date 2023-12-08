@@ -14,22 +14,28 @@
 <h3>Add Day Content</h3>
 <div class="card">
     <div class="form-group field" style="padding: 5px; margin:  5px">
-        <div>
-            <label>Date:</label>
-            <label>@today</label>
+        <div class="separator">
+            
+            <h2>Day Content</h2>
         </div>
-        <div>
-            <label>User</label>
-            <label>@username</label>
+        <div class="panel"> 
+            <h4>Date:</h4>
+            <label>@today</label> 
+            <h4>User</h4>
+            <label>@username</label> 
         </div>
-        <div style="border:1px solid lightseagreen; padding: 5px; margin: 5px">
+        
+           <div class="separator">
+               <h2>Day Content Products</h2>
+           </div> 
+        <div class="panel">
             <div>
                 <label>Add products for this day content...</label>
             </div>
             <div style="padding: 5px; margin: 10px">
                 <label>Select Product</label>
-                <select  id="ProductDropDown" @onchange="ProductIsChanged">
-                    <option>Choose Product</option> 
+                <select id="ProductDropDown" @onchange="ProductIsChanged">
+                    <option>Choose Product</option>
                     @foreach (Product product in products ?? Enumerable.Empty<Product>())
                     {
                         <option value="@product.Id">@product.Type</option>
@@ -44,9 +50,9 @@
                 <label>Reason</label>
                 <input class="title" type="text" @bind="reason"/>
             </div>
-            <div class="button-row" style="padding: 5px; margin: 10px">  
+            <div class="button-row" style="padding: 5px; margin: 10px">
                 <button class="acceptbtn" @onclick="(async () => await AddProduct())">
-                   Add Product
+                    Add Product
                 </button>
 
             </div>
@@ -60,36 +66,36 @@
                             <th> Quantity </th>
                             <th> Reason </th>
                         </tr>
-                        @foreach(DCProduct dcProdcut in dayContentProducts)
-                          {
-                              <tr>
-                                  <td>@dcProdcut.productId</td>
-                                  <td>@dcProdcut.productName</td>
-                                  <td>@dcProdcut.quantity</td>
-                                  <td>@dcProdcut.reason</td>
-                                  <td>
-                                      <button @onclick="() => dayContentProducts.Remove(dcProdcut)">
-                                          X
-                                      </button>
-                                  </td>
-                              </tr>
-                          }
+                        @foreach (DCProduct dcProdcut in dayContentProducts)
+                        {
+                            <tr>
+                                <td>@dcProdcut.productId</td>
+                                <td>@dcProdcut.productName</td>
+                                <td>@dcProdcut.quantity</td>
+                                <td>@dcProdcut.reason</td>
+                                <td>
+                                    <button @onclick="() => dayContentProducts.Remove(dcProdcut)">
+                                        X
+                                    </button>
+                                </td>
+                            </tr>
+                        }
                     </table>
                 }
             </div>
-        </div> 
-    
-        <div class="button-row" style="padding: 5px; margin: 10px"> 
-            <button @onclick="Create" class="acceptbtn">Creat Day Content</button> 
+        </div>
+
+        <div class="button-row" style="padding: 5px; margin: 10px">
+            <button @onclick="Create" class="acceptbtn">Creat Day Content</button>
         </div>
         <div>
-        @if (!string.IsNullOrEmpty(msg))
+            @if (!string.IsNullOrEmpty(msg))
             {
                 <label style="color: red">@msg</label>
             }
         </div>
-    
-        </div>
+
+    </div>
 </div>
 
 @code{
@@ -158,7 +164,7 @@
         var id = await DayContentService.CreateAsync(dto);
         
         
-        navMgr.NavigateTo($"/DayContents/{id}");
+        navMgr.NavigateTo($"/DayContentsItems/{id}");
         
     }
    public class DCProduct

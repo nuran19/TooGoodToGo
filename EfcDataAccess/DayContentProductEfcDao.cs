@@ -1,5 +1,6 @@
 using System.Data;
 using Application.DaoInterfaces;
+using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -95,5 +96,57 @@ public class DayContentProductEfcDao:IDayContentProductDao
             throw; 
         }
     }
+
+    
+
+    public async Task DeleteAsync(DayContentProduct dayContentProduct)
+    {
+        DayContentProduct dayContentProductToDelete = context.DayContentProduct
+            .FirstOrDefault(dc => dc.DayContentId == dayContentProduct.DayContentId && 
+                         dc.ProductId == dayContentProduct.ProductId);
+
+        if (dayContentProductToDelete == null)
+        {
+            throw new Exception($"DayContent with product ID {dayContentProduct.ProductId} not found.");
+        }
+
+        context.DayContentProduct.Remove(dayContentProductToDelete);
+        await context.SaveChangesAsync();
+        
+        /*
+        if (existingEntities.Any())
+        {
+            // If the entities are found, remove them
+            context.DayContentProduct.RemoveRange(existingEntities);
+            await context.SaveChangesAsync();
+        }
+        else
+        {
+            
+            throw new Exception($"DayContentProduct with DayContentId {dayContentProduct.DayContentId} and ProductId {dayContentProduct.ProductId} not found.");
+        }*/
+    }
+    
+    
+
+    public async Task<DayContentProduct?> GetByIdAsync(int dayContentId, int productId)
+    {
+        return await context.DayContentProduct.FindAsync(dayContentId,productId);
+    }
+
+    public async Task UpdateAsync(DayContentProduct dayContentProduct)
+    {
+        context.DayContentProduct.Update(dayContentProduct);
+        await context.SaveChangesAsync();
+    }
+    
+    
+
+    private async Task<DayContentProduct?> GetExistingProductAsync(int productId, int dayContentId)
+    {
+        return await context.DayContentProduct
+            .FirstOrDefaultAsync(p => p.ProductId == productId && p.DayContentId == dayContentId);
+    }
+    
 }
      

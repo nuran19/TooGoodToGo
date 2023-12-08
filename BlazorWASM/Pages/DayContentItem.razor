@@ -1,11 +1,12 @@
-
-@page "/DayContents/{id:int}"
+@*@page "/DayContents/{id:int}" *@
+@page "/DayContentsItems/{id:int}"
 @using Domain.DTOs
 @using Domain.Models
 @using HttpClients.ClientInterfaces
 @using Microsoft.VisualBasic
 @using System.Security.Claims
 @inject IDayContentService DayContentService;
+@inject NavigationManager navMgr;
 @inject IProductService ProductService;
 
 @attribute [Authorize] 
@@ -16,35 +17,44 @@
     
     @if (dayContentItem != null)
     {
+        <div class="separator">
+            <h2>Day Content</h2>
+            </div>
+        <div class="panel">
         <h4>Id</h4>
         <p>@dayContentItem.Id</p>
         <h4>Date</h4>
         <p>@dayContentItem.Date.ToString()</p>
+        </div>
 
-
-
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Product Id</th>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Reason</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var product in dayContentItemProducts)
-            {
+        <div class="separator">
+            <h2>Day Content Products</h2> </div>
+        <div class="panel">
+            <table class="table">
+                <thead>
                 <tr>
-                    <td>@product.ProductId</td>
-                    <td>@product.ProductName </td>
-                    <td>@product.Quantity</td>
-                    <td>@product.Reason</td>
-
+                    <th>Product Id</th>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Reason</th>
                 </tr>
-            }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach (var product in dayContentItemProducts)
+                {
+                    <tr>
+                        <td>@product.ProductId</td>
+                        <td>@product.ProductName </td>
+                        <td>@product.Quantity</td>
+                        <td>@product.Reason</td>
+
+                    </tr>
+                }
+                </tbody>
+            </table>
+             <button @onclick="@(() => GoToManageDayContent())" class="deletebtn" style="width: 150px">Update</button>
+        </div>
+       
     }
      else
         {
@@ -74,10 +84,8 @@
         try
         {
             dayContentItem = await DayContentService.GetByIdAsync(Id);
-          //  dayContentItemProducts = await DayContentService.GetProductsAsync(Id);
             dayContentItemProducts = await DayContentService.GetDayContentDetailAsync(Id);
             
-            //Console.WriteLine($"Received {dayContentItemProducts.Count} products for day content {Id}");
         }
         catch (Exception e)
         {
@@ -85,5 +93,10 @@
             msg = e.Message;
         }
     }
+    
+    private async Task GoToManageDayContent()
+    {
+        navMgr.NavigateTo($"/ManageDayContent/{Id}");
+    } 
     
 }

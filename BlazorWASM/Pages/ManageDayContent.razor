@@ -1,0 +1,207 @@
+@page "/ManageDayContent/{id:int}"
+@using Domain.DTOs
+@using Domain.Models
+@using HttpClients.ClientInterfaces
+@using System.Reflection.Metadata.Ecma335
+@inject IDayContentService DayContentService; 
+@inject NavigationManager navMgr;
+@attribute [Authorize] 
+ 
+@if (Id != 0)
+{
+    <div class="card">
+
+        <h3>View Day Content Item</h3>
+        @if (dayContentItem != null)
+        {
+            <div class="separator">
+                <h2>Day Content</h2> </div>
+            <div class="panel">
+                <h4>Id</h4>
+                <p>@dayContentItem.Id</p>
+                <h4>Date</h4>
+                <label>@dayContentItem.Date.ToString()</label>
+            </div>
+
+            <div class="separator">
+                <h2>Day Content Products</h2> </div>
+            <div class="panel">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Product Id</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Reason</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var product in dayContentItemProducts)
+                    {
+                        <tr>
+                            <td>@product.ProductId </td>
+                            <td>@product.ProductName </td>
+                            <td><input value="@product.Quantity"  @onchange="@((e) => onChangeQuantity(product.ProductId, e))" /> </td>
+                            <td><input value="@product.Reason"  @onchange="@((e) => onChangeReason(product.ProductId, e))"/> </td>
+                            <td><button @onclick="@(() => RemoveDayContentProduct(product))" class="btn">Delete</button></td>
+
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+
+
+            <div class="panel">
+                <button @onclick="@(() => SaveDayContent())" class="deletebtn">Save</button>
+                <button @onclick="@(() => RemoveDayContent())" class="deletebtn">Delete </button>
+                <button @onclick="@(() => close())" class="deletebtn">Close</button>
+            </div>
+            
+            @if (changesSavedSuccessfully)
+            {
+                <p class="success-message">Changes saved successfully!</p>
+            }
+            else if (!string.IsNullOrEmpty(msg))
+            {
+                <p class="error-message">@msg</p>
+            }
+        }
+        else
+        {
+            <p>Day Content not found.</p>
+        }
+        @if (!string.IsNullOrEmpty(msg))
+        {
+            <p>@msg</p>
+        }
+    </div>
+}
+else
+{
+    <div><p> Day content was successfully deleted! </p></div>
+}
+
+       
+
+@code {
+    
+    [Parameter]
+    
+    public int Id { get; set; }
+    private DayContentBasicDto dayContentItem;
+    private ICollection<DayContentProductDetail> dayContentItemProducts = new List<DayContentProductDetail>() {};
+    private List<int> productIdsToDelete = new List<int>(){};
+    private bool changesSavedSuccessfully = false;
+    private string msg = "";   
+    protected override async Task OnInitializedAsync()  //loading when page opens
+    {
+        try
+        {
+            if (Id != 0)
+            {
+                dayContentItem = await DayContentService.GetByIdAsync(Id); 
+                dayContentItemProducts = await DayContentService.GetDayContentDetailAsync(Id);
+            } 
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            msg = e.Message;
+        }
+    }
+    
+    private void onChangeQuantity(int productId, Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        var value = (string)args.Value; 
+        Console.WriteLine($"Product ID: {productId}, New Value: {value}");
+        foreach (var product in dayContentItemProducts)
+        {
+            if (product.ProductId == productId)
+            {
+                product.Quantity = Convert.ToInt32(value);
+            }
+        }
+        
+    }
+    private void onChangeReason(int productId, Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        var reason = (string)args.Value; 
+        foreach (var product in dayContentItemProducts)
+        {
+            if (product.ProductId == productId)
+            {
+                product.Reason = reason;
+            }
+        }
+        
+    }
+ 
+    // this will delete the day content along with all products
+    private async Task RemoveDayContent()
+    {
+        // Id is dayContentId 
+        await DayContentService.DeleteAsync(Id,true,productIdsToDelete);
+        navMgr.NavigateTo($"/ManageDayContent/{0}");
+    } 
+    
+    private async Task RemoveDayContentProduct(DayContentProductDetail product)
+    {
+        dayContentItemProducts.Remove(product);
+        productIdsToDelete.Add(product.ProductId);
+    }
+
+    private void close()
+    {
+        navMgr.NavigateTo($"/AddDayContent");
+    }
+
+    private async Task SaveDayContent()
+    {
+        try
+        {
+
+        
+        // if user has only removed products from day content and saved
+        if (productIdsToDelete.Any())
+        {
+            await DayContentService.DeleteAsync(Id,false,productIdsToDelete);
+        }
+        // if quantity or reason is updated
+        if (dayContentItemProducts.Any())
+        {
+            
+            List<DayContentProductUpdateDto> dcProductsDto = new List<DayContentProductUpdateDto>();
+            foreach (var dcProducts in dayContentItemProducts)
+            {
+                DayContentProductUpdateDto dto = new DayContentProductUpdateDto();
+                dto.ProductId = dcProducts.ProductId;
+                dto.Quantity = dcProducts.Quantity;
+                dto.Reason = dcProducts.Reason;
+                dcProductsDto.Add(dto);
+                
+                Console.WriteLine($"Product ID: {dto.ProductId}, Quantity: {dto.Quantity}, Reason: {dto.Reason}");
+                
+            }
+            DayContentUpdateDto updateDto = new DayContentUpdateDto(Id);
+            updateDto.Products = dcProductsDto; 
+            foreach (var dto in dcProductsDto)
+            {
+                Console.WriteLine($"Product ID: {dto.ProductId}, Quantity: {dto.Quantity}, Reason: {dto.Reason}");
+            }
+
+            await DayContentService.UpdateAsync(updateDto);
+        }
+            changesSavedSuccessfully = true;
+        }
+        catch (Exception e)
+        {
+    // Set the failure state and display error message
+            msg = $"Error saving changes: {e.Message}";
+            changesSavedSuccessfully = false;
+        }
+        
+    }
+
+}

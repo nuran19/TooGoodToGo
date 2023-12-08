@@ -21,4 +21,12 @@ public interface IDayContentLogic
     
     Task<List<DayContent>> GetMonthEntries(int month, int year);
     Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate);
+    
+    // Task<DayContent> UpdateAsync(int dayContentId, DayContentUpdateDto dto);
+    
+    Task<DayContent> UpdateAsync(DayContentUpdateDto dto);
+    
+    //Task DeleteAsync(int dayContentId);
+    Task DeleteAsync(int dayContentId,bool deleteProducts = false, List<int> productIds = null);
+    Task UpdateRelatedProducts(int dayContentId, List<DayContentProductUpdateDto> productDtos);
 }

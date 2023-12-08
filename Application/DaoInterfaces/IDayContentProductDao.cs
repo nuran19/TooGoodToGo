@@ -12,9 +12,10 @@ public interface IDayContentProductDao
     Task<ICollection<DayContentProduct>> GetProductsAsync(int dayContentId);
 
     Task<ICollection<DayContentProductDetail>> GetDayContentDetailAsync(int dayContentId);
+    
 
-    // Task<IEnumerable<DayContentProduct>> GetAsync(SearchDayContentProductParametersDto searchParameters);
-
-
-    // Task<DayContentProduct?> GetByIdAsync(int dayContentid);
+    Task UpdateAsync(DayContentProduct dayContentProduct);
+    
+    Task DeleteAsync(DayContentProduct dayContentProduct);
+    Task<DayContentProduct?> GetByIdAsync(int dayContentId, int productId);
 }

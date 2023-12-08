@@ -79,4 +79,26 @@ public class DayContentEfcDao : IDayContentDao
             .Where(entry => entry.Date >= startDate && entry.Date <= endDate)
             .ToListAsync();
     }
+    
+
+    public async Task UpdateAsync(DayContent dayContent)
+    {
+        context.DayContent.Update(dayContent);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(int dayContentId)
+    {
+        var dayContent = await context.DayContent.FindAsync(dayContentId);
+
+        if (dayContent == null)
+        {
+            throw new Exception($"DayContent with ID {dayContentId} not found.");
+        }
+
+        context.DayContent.Remove(dayContent);
+        await context.SaveChangesAsync();
+    }
+    
+    
 }
