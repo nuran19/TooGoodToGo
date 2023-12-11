@@ -1,4 +1,3 @@
-
 @page "/ViewProducts"
 @using Domain.Models
 @using HttpClients.ClientInterfaces
@@ -6,70 +5,66 @@
 @inject IProductService ProductService
 
 @attribute [Authorize] 
-@* need to be logged in for access*@
 
 <h1> Products</h1>
 
 <div class="filter-bar">
-     @* <label>Looking for something specific, add search filters:</label> *@
-     <div class="filters-container">
-         <label>Looking for something specific, add search filters:</label>
-         <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => doShowFilters = !doShowFilters)" alt="Funnel"/>
-         @if (doShowFilters)
-         {
-             <div class="filter">
-                 <label>Added by: Employee name:</label>
-                 <input type="text" @bind="usernameFilter"/>
-             </div>
-             <div class="filter">
-                 <label>Employee id:</label>
-                 <input type="number" @bind="userIdFilter"/>
-             </div>
-             <div class="filter">
-                 <label>Product subcategory contains:</label>
-                 <input type="text" @bind="subCategoryNameFilter"/>
-             </div>
-             <div class="filter">
-                 <label>Product name contains:</label>
-                 <input type="text" @bind="typeContainsFilter"/>
-             </div>
-             <div class="filter">
-                 <label>Brand name contains:</label>
-                 <input type="text" @bind="brandContainsFilter"/>
-             </div>
-             <div>
-                 <button  @onclick="LoadProducts" class="btn">Search</button>
-             </div>
-         }
-     </div>
-      
+    <label>Looking for something specific, add search filters:</label>
+    <img src="icons/@(doShowFilters ? "clear_" : "")funnel.png" class="funnel" @onclick="@(() => doShowFilters = !doShowFilters)" alt="Funnel"/>
+    @if (doShowFilters)
+    {
+        <div class="flex-container">
+            <div class="filter">
+                <label>Employee name:</label>
+                <input type="text" @bind="usernameFilter"/>
+            </div>
+            <div class="filter">
+                <label>Employee id:</label>
+                <input type="number" @bind="userIdFilter"/>
+            </div>
+            <div class="filter">
+                <label>Product subcategory contains:</label>
+                <input type="text" @bind="subCategoryNameFilter"/>
+            </div>
+            <div class="filter">
+                <label>Product name contains:</label>
+                <input type="text" @bind="typeContainsFilter"/>
+            </div>
+            <div class="filter">
+                <label>Brand name contains:</label>
+                <input type="text" @bind="brandContainsFilter"/>
+            </div>
+        </div>
+        <div>
+        <button  @onclick="LoadProducts" class="btn">Search</button>
+        </div>
+    }
 </div>
-
 
 @if (products == null)
 {
 }
 else if (!products.Any())
 {
-    <p>No posts to display</p>
+    <p>No products to display</p>
 }
 else
 {
     <table class="table">
         <thead>
-        <tr>
-            <th>Product Type</th>
-            <th>Brand</th>
-        </tr>
+            <tr>
+                <th>Product Type</th>
+                <th>Brand</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var item in products)
-        {
-            <tr>
-                <td> <a href="/SingleProduct/@item.Id">@item.Type</a> </td>  
-                <td>@item.Brand</td>
-             </tr>
-        }
+            @foreach (var item in products)
+            {
+                <tr>
+                    <td> <a href="/SingleProduct/@item.Id" class="table-link">@item.Type</a> </td>  
+                    <td>@item.Brand</td>
+                </tr>
+            }
         </tbody>
     </table>
 }
@@ -77,6 +72,7 @@ else
 {
     <label style="color: red">@msg</label>
 }
+
 
 @code {
     [CascadingParameter]

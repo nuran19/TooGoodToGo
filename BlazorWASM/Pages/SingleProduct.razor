@@ -12,7 +12,7 @@
 
 <!-- {int:id} ????  "SingleProduct/{int:id}-->
 
-<h3>Product</h3>
+<h1>Product</h1>
 
 @if (product == null)
 {
@@ -21,30 +21,28 @@
 else
 {
     <div class="table-container">
-        <table class="table">
-            @* <tr> *@
-            @*     <td>@product.Id</td> *@
-            @* </tr> *@
-            <tr>
-                <td class="productview">Added by:  @product.OwnerName</td>
-            </tr>
-            <tr>
-                <td class="productview">Category:  @product.CategoryName</td>
-            </tr>
-            <tr>
-                <td class="productview">Subcategory: @product.SubCategoryName</td>
-            </tr>
-            <tr>
-                <td class="productview">Product type: @product.Type</td>
-            </tr>
-            <tr>
-                <td class="productview">Brand: @product.Brand</td>
-            </tr>
-            <tr>
-                <td class="productview">Quantity in grams: @product.Qty</td>
-            </tr>
-        </table>
-    </div>
+         <table class="table">
+             <tr>
+                 <td class="productview">Added by: <span style="margin-left: 8px; color: #79D0C7">@product.OwnerName</span></td>
+             </tr>
+             <tr>
+                 <td class="productview">Category: <span style="margin-left: 8px;color: #79D0C7">@product.CategoryName</span></td>
+             </tr>
+             <tr>
+                 <td class="productview">Subcategory: <span style="margin-left: 8px;color: #79D0C7">@product.SubCategoryName</span></td>
+             </tr>
+             <tr>
+                 <td class="productview">Product type: <span style="margin-left: 8px;color: #79D0C7">@product.Type</span></td>
+             </tr>
+             <tr>
+                 <td class="productview">Brand: <span style="margin-left: 8px;color: #79D0C7">@product.Brand</span></td>
+             </tr>
+             <tr>
+                 <td class="productview">Quantity in grams: <span style="margin-left: 8px;color: #79D0C7">@product.Qty</span></td>
+             </tr>
+         </table>
+     </div>
+
     <div class="button-row">
         <button @onclick="@(() => RemoveProduct(product.Id))"  class="deletebtn">Delete product</button>   <!--how to add disabled button for password as well???? -->
     </div>

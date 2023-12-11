@@ -1,3 +1,24 @@
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease-in-out;
+    width: 100%;
+    max-width: 400px; /* Set a maximum width */
+    padding: 25px;
+    text-align: center;
+    margin: auto;
+    border-radius: 15px;
+}
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.table-responsive::-webkit-scrollbar{
+    display: none;
+}
 .table {
     width: 100%;
     border-collapse: separate;
@@ -33,3 +54,18 @@
     color: #000;
     margin-bottom:10px;
 }
+.deletebtn {
+    background-color: #124A4B; /* Midnight Green color */
+    border: none;
+    margin: 10px 0 10px 0;
+    border-radius: 5px;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.deletebtn:hover {
+    background-color: #45ADA2; /* Keppel color - Lighter on hover */
+}
+

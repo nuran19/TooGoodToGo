@@ -1,22 +1,59 @@
-.table {
-       width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    margin-bottom: 1rem;
-    border-color: grey;
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease-in-out;
+    width: 100%;
+    max-width: 700px; /* Set a maximum width */
+    padding: 22px;
+    text-align: center;
+    margin: auto;
+    border-radius: 15px;
+}
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-.table .thead-dark th {
-    color: #000;
-    background-color: #343a40;
-    border-color: #454d55;
+.table-responsive::-webkit-scrollbar{
+    display: none;
 }
-.table thead th {
-    border: none;
-    padding: 15px;
-    font-size: 16px;
-    color: #000;
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin: auto;
+    text-align: left;
 }
+
+.table td {
+    margin: 10px;
+    border: 1px solid #79D0C7; /* Tiffany Blue color */
+    color: #1a1e21;
+}
+
+.table th {
+    text-align: center;
+    padding: 10px;
+    color: #f2f2f2;
+    background-color: #124A4B; /* Keppel color */
+}
+
+.table tr:nth-child(even) {
+    background-color: #fff;
+}
+
+.table tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+.table input {
+    width: 100%; /* Full width for input fields */
+    padding: 8px;
+    margin: auto;
+    border: 1px solid #79D0C7; /* Tiffany Blue color */
+    border-radius: 5px;
+}
+
 .separator
 {
     background-color: teal;
@@ -31,5 +68,22 @@
     padding: 10px;
     font-size: 14px;
     color: #000;
-    margin-bottom:10px;
+    margin-bottom: 5px;
 }
+
+.deletebtn {
+    background-color: #124A4B; /* Midnight Green color */
+    border: none;
+    margin: 10px 0 10px 0;
+    border-radius: 5px;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.deletebtn:hover {
+    background-color: #45ADA2; /* Keppel color - Lighter on hover */
+}
+
+

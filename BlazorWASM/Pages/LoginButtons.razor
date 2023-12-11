@@ -6,14 +6,19 @@
 
 <AuthorizeView>
     <Authorized>
-        <label class=" icon2" @onclick="Logout">Sign out</label>
-        <img class="icon" src="icons/Logout.png" @onclick="Logout"/>
+        <div class="icon-wrapper" @onclick="Logout">
+            <label class="icon2">Sign out</label>
+            <img class="icon" src="icons/Logout.png" />
+        </div>
     </Authorized>
     <NotAuthorized>
-         <label class="icon2" @onclick="Login">Sign in</label>
-        <img class="icon" src="icons/Login.png" @onclick="Login"/>
+        <div class="icon-wrapper" @onclick="Login">
+            <label class="icon2">Sign in</label>
+            <img class="icon" src="icons/Login.png" />
+        </div>
     </NotAuthorized>
 </AuthorizeView>
+
 
 
 @code {

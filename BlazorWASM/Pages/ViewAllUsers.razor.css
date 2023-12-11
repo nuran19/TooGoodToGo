@@ -1,16 +1,11 @@
-.table thead {
-    color: #008080; /* Dark Sage Green */
-}
-.h3 {
-    text-align: center;
-}
 
 /* Filter bar styling */
 .filter-bar {
     padding: 10px;
-    margin: 15px;
-    background-color: #c1e0d9; /* Light Sage Green */
+    margin-bottom: 10px;
+    background-color: #124A4B; /* Midnight Green color */
     border-radius: 8px;
+    color: white;
 }
 
 .funnel {
@@ -20,63 +15,64 @@
 }
 
 .filter {
-    padding: 10px;
-    margin: 10px;
-    text-align: center;
+    text-align: left;
 }
-
-/* Link styling */
-a {
-    text-decoration: none;
-    color: #008080; /* Dark Sage Green */
+.filter label {
+    margin-right: 20px;
 }
-
-a:hover {
-    font-weight: bold;
+.filter input {
+    width: 100px;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #124A4B;
+    border-radius: 5px;
 }
-
-/* Button styling */
+    /* Button styling */
 .btn {
-    background-color: #3a9793; /* Sage Green */
+    background-color: #124A4B; /* Midnight Green color */
     border-radius: 5px;
     padding: 10px 15px;
-    margin: 20px;
+    margin: 25px 0 25px 0;
     color: #ffffff; /* White text */
-    border: 2px solid #005b56; /* Dark Sage Green */
+    border: 2px solid #45ADA2; /* Keppel color */
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-    background-color: #005b56; /* Dark Sage Green on hover */
+    background-color: #45ADA2; /* Keppel color on hover */
 }
 
 /* Table styling */
 .table {
     border-collapse: collapse;
-    border: 1px solid #808080; /* Grey */
+    border: 1px solid #79D0C7; /* Tiffany Blue color */
     padding: 15px;
     width: 100%;
-    text-align: left;
+    text-align: center;
 }
 
 .table th,
 .table td {
     padding: 15px;
+    border: 1px solid #79D0C7; /* Tiffany Blue color */
+    text-align: left;
+    color: #124A4B;
 }
 
-.table tr {
-    background-color: #c1e0d9; /* Light Sage Green */
+.table th {
+    color: #ffffff;
+    text-align: center;
+    background-color: #124A4B; /* Midnight Green color */
 }
 
 /* Style the even rows with a light background color */
-.table tbody tr:nth-child(even) {
-    background-color: #d4edeb; /* Lighter Sage Green */
+.table tr:nth-child(even) {
+    background-color: #fff; /* White background for even rows */
 }
 
-/* Style the odd rows with a different background color */
-.table tbody tr:nth-child(odd) {
-    background-color: #c1e0d9; /* Light Sage Green */
+.table tr:nth-child(odd) {
+    background-color: #f2f2f2; /* Gray background for odd rows */
 }
 
 /* Custom styling for delete label */

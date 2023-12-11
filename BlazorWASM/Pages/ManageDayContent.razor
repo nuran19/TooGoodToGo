@@ -11,7 +11,7 @@
 {
     <div class="card">
 
-        <h3>View Day Content Item</h3>
+        <h3>Manage Day Content Item</h3>
         @if (dayContentItem != null)
         {
             <div class="separator">
@@ -26,34 +26,35 @@
             <div class="separator">
                 <h2>Day Content Products</h2> </div>
             <div class="panel">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Product Id</th>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Reason</th>
-                        <th>Delete</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach (var product in dayContentItemProducts)
-                    {
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
                         <tr>
-                            <td>@product.ProductId </td>
-                            <td>@product.ProductName </td>
-                            <td><input value="@product.Quantity"  @onchange="@((e) => onChangeQuantity(product.ProductId, e))" /> </td>
-                            <td><input value="@product.Reason"  @onchange="@((e) => onChangeReason(product.ProductId, e))"/> </td>
-                            <td><button @onclick="@(() => RemoveDayContentProduct(product))" class="btn">Delete</button></td>
-
+                            <th>Product Id</th>
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Reason</th>
+                            <th>Delete</th>
                         </tr>
-                    }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        @foreach (var product in dayContentItemProducts)
+                        {
+                            <tr>
+                                <td>@product.ProductId </td>
+                                <td>@product.ProductName </td>
+                                <td><input value="@product.Quantity" @onchange="@((e) => onChangeQuantity(product.ProductId, e))"/> </td>
+                                <td><input value="@product.Reason" @onchange="@((e) => onChangeReason(product.ProductId, e))"/> </td>
+                                <td style="text-align: center;"><label @onclick="@(() => RemoveDayContentProduct(product))" style="cursor:pointer; color: red; font-weight: bold"> &#x2717</label>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
-
-            <div class="panel">
+            
+            <div class="button-row">
                 <button @onclick="@(() => SaveDayContent())" class="deletebtn">Save</button>
                 <button @onclick="@(() => RemoveDayContent())" class="deletebtn">Delete </button>
                 <button @onclick="@(() => close())" class="deletebtn">Close</button>

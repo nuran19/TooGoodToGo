@@ -1,11 +1,10 @@
 /* ContentsDaysOverview.razor.css */
-
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #82d3cb;
-    color: #fff;
-    margin: 0;
-    padding: 0;
+/* CSS HEX */
+root {
+    --midnight-green: #124A4Bff;
+    --celeste: #BDECE6ff;
+    --keppel: #45ADA2ff;
+    --tiffany-blue: #79D0C7ff;
 }
 
 .container {
@@ -23,7 +22,7 @@ body {
 }
 
 .card-header {
-    background-color: #82d3cb;
+    background-color: #79D0C7ff;
     color: #fff;
     border-bottom: 1px solid #ddd;
 }
@@ -33,12 +32,13 @@ body {
 }
 
 .btn-success {
-    background-color: #82d3cb;
+    border: hidden;
+    background-color: #79D0C7ff;
     color: #fff;
 }
 
 .btn-success:hover {
-    background-color: #71c1b9; /* A slightly darker shade on hover */
+    background-color: #45ADA2ff; /* A slightly darker shade on hover */
 }
 
 .table {
@@ -48,12 +48,24 @@ body {
 }
 
 th, td {
-    border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
+    border: 1px solid #ddd; /* Add border to all cells */
+
 }
 
 th {
-    background-color: #71c1b9; /* A slightly darker shade for table headers */
-    color: #008080; /* Text color for the table header */
+    background-color: #45ADA2ff; /* A slightly darker shade for table headers */
+    color: #124A4Bff; /* Text color for the table header */
+    border: none; /* Remove top border for header cells */
+}
+
+.date-link {
+    color: #124A4B;  
+    text-decoration: none; /* Remove underline  */
+    transition: color 0.3s ease-in-out; /* smooth color transition on hover */
+}
+
+.date-link:hover {
+    color: #45ADA2; /* the hover color */
 }

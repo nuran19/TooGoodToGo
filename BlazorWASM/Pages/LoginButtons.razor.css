@@ -1,9 +1,26 @@
-.icon {
-    width: 30px;
+.icon-wrapper {
+    display: flex;
+    align-items: center;
     cursor: pointer;
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
-.icon2{
-    width: 50px;
-    cursor: pointer;
+.icon-wrapper:hover {
+    transform: scale(1.1);
 }
+
+.icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+}
+
+.icon2 {
+    color: black;
+    font-size: 25px;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+}
+
+

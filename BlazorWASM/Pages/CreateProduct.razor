@@ -64,27 +64,26 @@
                     </select>
                 }
             </div>
-            <div>
-                <label>Product Type:</label>
-                <input class="title" type="text" @bind="productType"/>
-            
-                <label>Product Brand:</label>
-                <input type="text" @bind="productBrand" class="title"/>
-            
-                <label>Product Quantity in grams:</label>
-                <input type="text" @bind="productQty" class="title"/>
-            </div>
-
-            <div class="button-row">
-                @if (!string.IsNullOrEmpty(msg))
-                {
-                    <label style="color: red">@msg</label>
-                }
-                <button @onclick="Create" class="acceptbtn">SAVE</button>
-
-            </div>
-        </div>
-    
+          <div>
+                         <label style="margin-top: 20px;">Product Type:</label>
+                         <input class="title" type="text" @bind="productType"/>
+                     
+                         <label style="margin-top: 20px;">Product Brand:</label>
+                         <input type="text" @bind="productBrand" class="title"/>
+                     
+                         <label style="margin-top: 20px;">Product Quantity in grams:</label>
+                         <input type="text" @bind="productQty" class="title"/>
+                     </div>
+         
+                     <div class="button-row">
+                         @if (!string.IsNullOrEmpty(msg))
+                         {
+                             <label style="color: red">@msg</label>
+                         }
+                         <button @onclick="Create" class="acceptbtn">SAVE</button>
+         
+                     </div>
+                 </div>
     }    
 </div>
 @code {

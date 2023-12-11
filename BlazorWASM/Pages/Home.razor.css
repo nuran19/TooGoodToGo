@@ -98,7 +98,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #20b2aa;
+    background-color: #1ca099;
 }
 .home-hero1 {
     width: 100%;
@@ -112,7 +112,7 @@
     flex-direction: column;
     padding-bottom: 96px;
     justify-content: center;
-    background-color: #20b2aa;
+    background-color: #1ca099;
 }
 .home-container01 {
     gap: 32px;
@@ -157,13 +157,13 @@
     transition: 0.3s;
     font-weight: bold;
     padding-top: 1.5rem;
-    border-color: darkblue;
+    border-color: #167c76;
     border-width: 0px;
     padding-left: 3rem;
     border-radius: 45px;
     padding-right: 3rem;
     padding-bottom: 1.5rem;
-    background-color: darkblue;
+    background-color: #167c76;
 }
 .home-hero-button1:hover {
     color: #e9ecef;

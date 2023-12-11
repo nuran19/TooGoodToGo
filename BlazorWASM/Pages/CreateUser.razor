@@ -9,24 +9,27 @@
 
 <div class="card">
     <h3>Create User</h3>
-    <div class="form-group field">
+    <div class="field">
         <label>User name:</label>
         <input type="text" @bind="username" @bind:event="oninput"/>
-        <label>Password:</label>
-        <input type="text" @bind="password" @bind:event="oninput"/>
-           @* <label>Company id:</label> *@
-           @*      <input type="text" @bind="companyId" @bind:event="oninput"/> *@ 
-         <label>Role: </label> 
-        @* <input type="text" @bind="role" @bind:event="oninput"/> *@
-        <select @bind="role" >
-            <option>Employee</option>
-              <option>Manager</option>
-        </select>
-        @if (!string.IsNullOrEmpty(resultMsg))
-        {
-            <label style="color: @color">@resultMsg</label>
-        }
     </div>
+    <div class="field">
+        <label style="margin-top: 10px;">Password:</label>
+        <input type="text" @bind="password" @bind:event="oninput"/>
+    </div>
+    <div class="field">
+        <label style="margin-top: 10px;">Role: </label>
+        @* <input type="text" @bind="role" @bind:event="oninput"/> *@
+        <select @bind="role">
+            <option style="background: lightseagreen">Employee</option>
+            <option style=" background: lightseagreen">Manager</option>
+        </select>
+    </div>
+    
+    @if (!string.IsNullOrEmpty(resultMsg))
+    {
+        <label style="color: @color">@resultMsg</label>
+    }
     <div class="button-row">
         <button @onclick="Create" disabled="@(string.IsNullOrEmpty(username) && string.IsNullOrEmpty(password))" class="acceptbtn">Create</button>   <!--how to add disabled button for password as well???? -->
     </div>

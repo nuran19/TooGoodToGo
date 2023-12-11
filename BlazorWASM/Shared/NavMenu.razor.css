@@ -1,16 +1,38 @@
+/* Color Codes */
+/* --midnight-green: #124A4Bff;
+--tiffany-blue: #79D0C7ff;
+--celeste: #B1E4DEff;
+--keppel: #45ADA2ff;  */
+
+/* Navbar Toggler */
 .navbar-toggler {
-    /*background-color: rgba(255, 255, 255, 0.1);*/
-  background-color: #009999; 
+    background-color: #124A4Bff;
+    transition: background-color 0.3s ease-in-out;
 }
 
+.navbar-toggler:hover {
+    background-color: #007777;
+}
+
+/* Top Row */
 .top-row {
     height: 3.5rem;
-    background-color: lightseagreen;
-    /*background-color: rgba(0,0,0,0.4);*/
+    background-color: #45ADA2ff;
+    transition: background-color 0.3s ease-in-out;
 }
 
+/* Container Fluid */
+.container-fluid {
+    text-align: center;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Navbar Brand */
 .navbar-brand {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
+    color: white;
+    margin: 2px 2px 2px;
+    transition: color 0.3s ease-in-out;
 }
 
 .oi {
@@ -20,35 +42,44 @@
     top: -2px;
 }
 
-.nav-item {
-    font-size: 0.9rem;
-    padding-bottom: 0.5rem;
+/* Navbar Brand Hover */
+.navbar-brand:hover {
+    color: #B1E4DEff;
 }
 
-    .nav-item:first-of-type {
-        padding-top: 1rem;
-    }
+/* Nav Item */
+.nav-item {
+    font-size: 1rem;
+    padding-bottom: 0.5rem;
+    transition: padding 0.3s ease-in-out;
+}
 
-    .nav-item:last-of-type {
-        padding-bottom: 1rem;
-    }
+/* Nav Item First Hover */
+.nav-item:hover {
+    padding-top: 1rem;
+}
 
-    .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
-    }
+/* Nav Link */
+.nav-item ::deep a {
+    color: #B1E4DEff;
+    margin: 2px 2px 2px 2px;
+    border-radius: 4px;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    line-height: 3rem;
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
 
+/* Nav Link Active */
 .nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.25);
+    background-color: rgba(255, 255, 255, 0.25);
     color: white;
 }
 
+/* Nav Link Hover */
 .nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     color: white;
 }
 
@@ -58,13 +89,12 @@
     }
 
     .collapse {
-        /* Never collapse the sidebar for wide screens */
         display: block;
     }
-    
+
     .nav-scrollable {
-        /* Allow sidebar to scroll for tall menus */
         height: calc(100vh - 3.5rem);
         overflow-y: auto;
     }
 }
+

@@ -62,7 +62,7 @@ else
                 <td>@user.Id</td>
                 <td>@user.UserName</td>
                 <td>@user.Role</td>
-                <td><label @onclick="@(() => DeleteUser(user.Id))" style="cursor:pointer; color: red; font-weight: bold"> &#x2717;</label></td>
+                <td style="text-align: center;"><label @onclick="@(() => DeleteUser(user.Id))" style="cursor:pointer; color: red; font-weight: bold;"> &#x2717;</label></td>
             </tr>
         }
         </tbody>

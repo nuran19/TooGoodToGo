@@ -11,11 +11,10 @@
 @* @attribute [Authorize]  *@
 
 
-<h3>Add Day Content</h3>
+ @* <h3>Add Day Content</h3> *@
 <div class="card">
-    <div class="form-group field" style="padding: 5px; margin:  5px">
+    <div class="form-group field">
         <div class="separator">
-            
             <h2>Day Content</h2>
         </div>
         <div class="panel"> 
@@ -30,63 +29,65 @@
            </div> 
         <div class="panel">
             <div>
-                <label>Add products for this day content...</label>
-            </div>
-            <div style="padding: 5px; margin: 10px">
-                <label>Select Product</label>
-                <select id="ProductDropDown" @onchange="ProductIsChanged">
-                    <option>Choose Product</option>
-                    @foreach (Product product in products ?? Enumerable.Empty<Product>())
-                    {
-                        <option value="@product.Id">@product.Type</option>
-                    }
-                </select>
-            </div>
-            <div style="padding: 5px; margin: 10px">
-                <label>Add quantity</label>
-                <input class="title" type="text" @bind="quantity"/>
-            </div>
-            <div style="padding: 5px; margin: 10px">
-                <label>Reason</label>
+                <div>
+                    <label>Add products for this day content...</label>
+                </div>
+                <div>
+                    <label>Select Product: </label>
+                    <select id="ProductDropDown" @onchange="ProductIsChanged">
+                        <option>Choose product..</option>
+                        @foreach (Product product in products ?? Enumerable.Empty<Product>())
+                        {
+                            <option value="@product.Id">@product.Type</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <label>Add quantity:</label>
+                    <input class="title" type="text" @bind="quantity"/>
+                </div>
+            <div>
+                <label>Reason:</label>
                 <input class="title" type="text" @bind="reason"/>
             </div>
-            <div class="button-row" style="padding: 5px; margin: 10px">
+            <div class="button-row">
                 <button class="acceptbtn" @onclick="(async () => await AddProduct())">
                     Add Product
                 </button>
 
             </div>
-            <div style="padding: 5px; margin: 10px">
+            <div>
                 @if (productAdded)
                 {
-                    <table id="prodcutTable" class="table" style="padding: 5px; border: 1px solid grey">
-                        <tr>
-                            <th> Product ID </th>
-                            <th> Product Name </th>
-                            <th> Quantity </th>
-                            <th> Reason </th>
-                        </tr>
-                        @foreach (DCProduct dcProdcut in dayContentProducts)
-                        {
+                    <div class="table-responsive">
+                        <table id="prodcutTable" class="table" >
                             <tr>
-                                <td>@dcProdcut.productId</td>
-                                <td>@dcProdcut.productName</td>
-                                <td>@dcProdcut.quantity</td>
-                                <td>@dcProdcut.reason</td>
-                                <td>
-                                    <button @onclick="() => dayContentProducts.Remove(dcProdcut)">
-                                        X
-                                    </button>
-                                </td>
+                                <th> Product ID </th>
+                                <th> Product Name </th>
+                                <th> Quantity </th>
+                                <th> Reason </th>
+                                <th> Delete</th>
                             </tr>
-                        }
-                    </table>
+                            @foreach (DCProduct dcProdcut in dayContentProducts)
+                            {
+                                <tr>
+                                    <td>@dcProdcut.productId</td>
+                                    <td>@dcProdcut.productName</td>
+                                    <td>@dcProdcut.quantity</td>
+                                    <td>@dcProdcut.reason</td>
+                                    <td style="text-align: center;">
+                                        <label @onclick="() => dayContentProducts.Remove(dcProdcut)" style="cursor:pointer; color: red; font-weight: bold"> &#x2717;</label>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
                 }
             </div>
         </div>
 
-        <div class="button-row" style="padding: 5px; margin: 10px">
-            <button @onclick="Create" class="acceptbtn">Creat Day Content</button>
+        <div class="button-row" >
+            <button @onclick="Create" class="acceptbtn">Create Day Content</button>
         </div>
         <div>
             @if (!string.IsNullOrEmpty(msg))
@@ -96,6 +97,7 @@
         </div>
 
     </div>
+</div>
 </div>
 
 @code{

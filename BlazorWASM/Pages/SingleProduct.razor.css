@@ -1,33 +1,49 @@
+/* Add this CSS to improve the table and button styling */
 .table-container {
-    margin: 20px;
-        display: flex;
-        flex-direction: column;
-      
+    max-width: 600px;
+    margin: auto;
+    border: 1px solid #79D0C7;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
-table {
+
+.table {
     width: 100%;
     border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
 }
 
+.table td {
+    padding: 15px;
+    border-bottom: 1px solid #79D0C7;
+}
 
-.title .owner {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    margin-bottom: 10px;
-    text-align: left;
+.table td.productview {
     font-weight: bold;
+    color: #124A4B;
 }
-.body {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    /*height: 500px; !* Increase the height as needed *!*/
-    margin-bottom: 10px;
+
+.button-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.deletebtn {
+    background-color: #ff0000; /* Red */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.deletebtn:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
+
+.label-error {
+    color: red;
+    margin-top: 20px;
 }

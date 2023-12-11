@@ -30,29 +30,31 @@
         <div class="separator">
             <h2>Day Content Products</h2> </div>
         <div class="panel">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Product Id</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
-                    <th>Reason</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var product in dayContentItemProducts)
-                {
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td>@product.ProductId</td>
-                        <td>@product.ProductName </td>
-                        <td>@product.Quantity</td>
-                        <td>@product.Reason</td>
-
+                        <th>Product Id</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Reason</th>
                     </tr>
-                }
-                </tbody>
-            </table>
-             <button @onclick="@(() => GoToManageDayContent())" class="deletebtn" style="width: 150px">Update</button>
+                    </thead>
+                    <tbody>
+                    @foreach (var product in dayContentItemProducts)
+                    {
+                        <tr>
+                            <td>@product.ProductId</td>
+                            <td>@product.ProductName </td>
+                            <td>@product.Quantity</td>
+                            <td>@product.Reason</td>
+
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                </div>
+            <button @onclick="@(() => GoToManageDayContent())" class="deletebtn" style="width: 150px">Update</button>
         </div>
        
     }
