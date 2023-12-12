@@ -2,6 +2,7 @@
 @using BlazorWASM
 @using Domain.Models
 @using HttpClients.ClientInterfaces
+@using System.Security.Claims
 @inject IUserService authService
 @inject NavigationManager navMgr
 
@@ -30,14 +31,18 @@
             </div>
         </div>
     </NotAuthorized>
-    <Authorized>
-        <div class="card">
-            <h3>Hello, @context.User.Identity.Name <br> You are already logged in.</h3>
-        </div>
-    </Authorized>
+     <Authorized>
+         <div class="card">
+             <h3>Hello, @context.User.Identity.Name <br> You are already logged in.</h3>
+         </div>
+     </Authorized>
 </AuthorizeView>
 
 @code {
+    
+    // [CascadingParameter]
+    // public Task<AuthenticationState> AuthState { get; set; } = null!; //added to remember the logged in claims
+    
     private string userName;
     private string password;
     private string errorLabel;
@@ -48,7 +53,7 @@
         try
         {
             await authService.LoginAsync(userName, password);
-            navMgr.NavigateTo($"/CreateProduct");  
+            navMgr.NavigateTo($"/ContentsDaysOverview"); 
         }
         catch (Exception e)
         {
@@ -57,5 +62,15 @@
         }
     }
 
+    // private async Task<string?> GetRoleAsync() 
+    // {
+    //     AuthenticationState authState = await AuthState;
+    //     ClaimsPrincipal user = authState.User;
+    //
+    //     IEnumerable<Claim> claims = user.Claims;
+    //     Claim roleClaim = claims.First(claim => claim.Type.Equals("Role"));
+    //     string role = roleClaim.Value;
+    //     return role;
+    // }
 }
 

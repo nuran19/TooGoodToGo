@@ -9,6 +9,8 @@ public class AuthorizationPolicies
     {
         services.AddAuthorizationCore(options =>
         {
+            options.AddPolicy("MustBeManager", a =>
+                a.RequireAuthenticatedUser().RequireClaim("Role", "Manager"));
              // options.AddPolicy("MustBePostCreator", a =>
              //    a.RequireAuthenticatedUser().RequireClaim("Role", "PostCreator"));
             //add for each role if doing smth different a policy + setting the role when creating user-> but set the role in the server
@@ -19,8 +21,8 @@ public class AuthorizationPolicies
             //     options.AddPolicy("SecurityLevel4", a =>
             //         a.RequireAuthenticatedUser().RequireClaim("SecurityLevel", "4", "5"));
             //
-            //    options.AddPolicy("MustBeTeacher", a =>
-            //         a.RequireAuthenticatedUser().RequireClaim("Role", "Teacher"));
+            //
+            
             //
             //     options.AddPolicy("SecurityLevel2OrAbove", a =>
             //         a.RequireAuthenticatedUser().RequireAssertion(context =>

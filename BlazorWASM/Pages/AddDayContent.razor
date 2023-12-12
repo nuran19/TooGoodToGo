@@ -46,10 +46,18 @@
                     <label>Add quantity:</label>
                     <input class="title" type="text" @bind="quantity"/>
                 </div>
-            <div>
-                <label>Reason:</label>
-                <input class="title" type="text" @bind="reason"/>
-            </div>
+                <div>
+                      
+                    <label>Reason:</label>
+                    <select class="title" type="text" @bind="reason">
+                         <option style="background: lightseagreen">Choose reason</option> 
+                        <option style="background: lightseagreen">Damaged packaging</option>
+                        <option style=" background: lightseagreen">Damaged product</option>
+                        <option style=" background: lightseagreen">Wonky product</option>
+                        <option style=" background: lightseagreen">Old</option>
+                        <option style=" background: lightseagreen">Other</option>
+                    </select>
+                </div>
             <div class="button-row">
                 <button class="acceptbtn" @onclick="(async () => await AddProduct())">
                     Add Product
@@ -123,7 +131,6 @@
     private ProductBasicDto selectedProduct;
     
     private string msg = "";
-  
     
     protected override async Task OnInitializedAsync()
     { 
@@ -156,18 +163,16 @@
     // Creating a Day Content with products
     private async Task Create()
     {
+            foreach (var dcProduct in dayContentProducts)
+            {
+                Console.WriteLine(dcProduct.productName);
+                dayContentProductsNew.Add(new DayContentProduct(0, dcProduct.productId, dcProduct.quantity, dcProduct.reason));
+            }
+            DayContentCreationDto dto = new(userId.Value, today, dayContentProductsNew);
+            var id = await DayContentService.CreateAsync(dto);
         
-        foreach (var dcProduct in dayContentProducts)
-        {
-            Console.WriteLine(dcProduct.productName);
-            dayContentProductsNew.Add(new DayContentProduct(0,dcProduct.productId, dcProduct.quantity, dcProduct.reason));
-        }
-        DayContentCreationDto dto = new(userId.Value, today, dayContentProductsNew);
-        var id = await DayContentService.CreateAsync(dto);
-        
-        
-        navMgr.NavigateTo($"/DayContentsItems/{id}");
-        
+            navMgr.NavigateTo($"/DayContentsItems/{id}");
+    
     }
    public class DCProduct
     {
@@ -184,4 +189,7 @@
             this.reason = reason;
         } 
     }
+    
+  
+
 }

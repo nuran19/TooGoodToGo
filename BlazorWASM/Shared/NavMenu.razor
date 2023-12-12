@@ -8,89 +8,81 @@
 </div>
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        @* <div class="nav-item px-3"> *@
-        @*     <NavLink class="nav-link" href="" Match="NavLinkMatch.All"> *@
-        @*         <span class="oi oi-home" aria-hidden="true"></span> Home *@
-        @*     </NavLink> *@
-        @* </div> *@
-        @*
-        <AuthorizeView>
-            <NotAuthorized>  
+       
+        
+        <AuthorizeView Roles="Employee">
+            <Authorized>
+               
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="Home">
-                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    <NavLink class="nav-link" href="ContentsDaysOverview">
+                        <span class="oi oi-calendar" aria-hidden="true"></span> Days Overview
                     </NavLink>
                 </div>
-            </NotAuthorized>
-        </AuthorizeView> *@
-        
-        
-        @* <AuthorizeView Policy="MustBeSomeRole">  to see depending to role*@ 
-        <AuthorizeView>
-            <Authorized>
+                        
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="CreateUser">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Create user
+                    <NavLink class="nav-link" href="AddDayContent">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Add Day Content
                     </NavLink>
+                </div>
+                        
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="ViewProducts">
+                        <span class="oi oi-list" aria-hidden="true"></span> View All Products
+                    </NavLink>
+                            
                 </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="CreateProduct">
                         <span class="oi oi-plus" aria-hidden="true"></span> Add New Product
                     </NavLink>
                 </div>
-                
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="AddDayContent">
-                        <span class="oi oi-plus" aria-hidden="true"></span> Add Day Content
-                    </NavLink>
-                </div>
-                
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="ViewProducts">
-                        <span class="oi oi-list" aria-hidden="true"></span> View All Products
-                    </NavLink>
                     
-                </div>
-                
-                @*<div class="nav-item px-3">
-                                    <NavLink class="nav-link" href="ManageDayContent/75">
-                                        <span class="oi oi-home" aria-hidden="true"></span> Manage Day Content
-                                    </NavLink>
-                                </div>*@
-                @*<div class="nav-item px-3">
-                    <NavLink class="nav-link" href="DayContentItem">
-                        <span class="oi oi-home" aria-hidden="true"></span> View Day Content
-                    </NavLink>
-                </div>*@
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="ViewAllUsers">
-                        <span class="oi oi-people" aria-hidden="true"></span> View All Users
-                    </NavLink>
-                </div>
-                 <div class="nav-item px-3">
-                                     <NavLink class="nav-link" href="ContentsDaysOverview">
-                                         <span class="oi oi-calendar" aria-hidden="true"></span> Days Overview
-                                         </NavLink>
-                                     </div>
-                
-                  <div class="nav-item px-3">
-                      <NavLink class="nav-link" href="Chart">
-                          <span class="oi oi-bar-chart" aria-hidden="true"></span> Chart
-                      </NavLink>
-                      </div>
             </Authorized>
         </AuthorizeView>
-        @* <div class="nav-item px-3"> *@
-        @*     <NavLink class="nav-link" href="ViewProducts"> *@
-        @*         <span class="oi oi-plus" aria-hidden="true"></span> View Products *@
-        @*     </NavLink> *@
-        @* </div> *@
         
-        @* <div class="nav-item px-3"> *@
-        @*       <NavLink class="nav-link" href="Login"> *@
-        @*           <span class="oi oi-plus" aria-hidden="true"></span> Log in *@
-        @*       </NavLink> *@
-        @* </div>   *@
+        
+     <AuthorizeView Roles="Manager">
+                <Authorized>
+                         <div class="nav-item px-3">
+                             <NavLink class="nav-link" href="ContentsDaysOverview">
+                                 <span class="oi oi-calendar" aria-hidden="true"></span> Days Overview
+                             </NavLink>
+                         </div>
+     
+         <div class="nav-item px-3">
+             <NavLink class="nav-link" href="Chart">
+                 <span class="oi oi-bar-chart" aria-hidden="true"></span> Data visualisation
+             </NavLink>
+         </div>
+          <div class="nav-item px-3">
+                                      <NavLink class="nav-link" href="ViewProducts">
+                                          <span class="oi oi-list" aria-hidden="true"></span> View All Products
+                                      </NavLink>
+     
+                                  </div>
+         <div class="nav-item px-3">
+             <NavLink class="nav-link" href="ViewAllUsers">
+                 <span class="oi oi-people" aria-hidden="true"></span> View All Users
+             </NavLink>
+         </div>
+         <div class="nav-item px-3">
+                                      <NavLink class="nav-link" href="CreateUser">
+                                          <span class="oi oi-plus" aria-hidden="true"></span> Create user
+                                      </NavLink>
+                                  </div>
+                                  <div class="nav-item px-3">
+                                      <NavLink class="nav-link" href="CreateProduct">
+                                          <span class="oi oi-plus" aria-hidden="true"></span> Add New Product
+                                      </NavLink>
+                                  </div>
+     
+                                  <div class="nav-item px-3">
+                                      <NavLink class="nav-link" href="AddDayContent">
+                                          <span class="oi oi-plus" aria-hidden="true"></span> Add Day Content
+                                      </NavLink>
+                                  </div>
+     </Authorized>
+                 </AuthorizeView>
 
     </nav>
 </div>
