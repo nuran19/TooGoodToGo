@@ -135,7 +135,7 @@ public class ProductHttpClient : IProductService
     //Get products method
     public async Task<IEnumerable<Product>> GetProducts(int subCatId)
     {
-        string uri = "/products";
+        string uri = "/products/GetProducts"; 
         if (subCatId != 0)
         {
             uri += $"?subCategoryId={subCatId}";

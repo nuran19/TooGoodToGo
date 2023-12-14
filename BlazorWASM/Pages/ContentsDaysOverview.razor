@@ -3,6 +3,7 @@
 @using global::Shared.Models
 @using HttpClients.ClientInterfaces
 @using System.Globalization
+@using System.Security.Claims
 
 @attribute [Authorize] 
 @* need to be logged in for access*@
@@ -69,6 +70,10 @@
     private string selectedMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Now.Month);
     private int selectedYear = DateTime.Now.Year;
     private List<DayContent> monthEntries;
+    private int? companyId;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;   //added to remember the logged in claims
+    
     
     protected override async Task OnInitializedAsync()
     {
@@ -85,20 +90,32 @@
         DateOnly endDate = DateOnly.FromDateTime(DateTime.Now.Date);
         DateOnly startDate = endDate.AddDays(-6); // 6 days ago
     // Fetch entries for the specified date range
-        monthEntries = await DayContentService.GetEntriesForDateRange(startDate, endDate);
+        companyId = await GetCompanyIdAsync();
+        monthEntries = await DayContentService.GetEntriesForDateRange(companyId.Value, startDate, endDate);
     }
     
     private async Task LoadMonthEntries()
     {
         try
         {
+            companyId = await GetCompanyIdAsync();
             int monthNumber = Array.IndexOf(CultureInfo.CurrentCulture.DateTimeFormat.MonthNames, selectedMonth) + 1;
-            monthEntries = await DayContentService.GetMonthEntries(monthNumber, selectedYear);
+            monthEntries = await DayContentService.GetMonthEntries(companyId.Value, monthNumber, selectedYear);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
         }
     }
+    
+    private async Task<int?> GetCompanyIdAsync()   //using the claims set in blazor/webapi/authController to get id ??????????????/add companyID
+    {
+        AuthenticationState authState = await AuthState;
+        ClaimsPrincipal user = authState.User;
 
+        IEnumerable<Claim> claims = user.Claims;
+        Claim idClaim = claims.First(claim => claim.Type.Equals("CompanyId"));
+        int id = int.Parse(idClaim.Value);
+        return id;
+    }
 }

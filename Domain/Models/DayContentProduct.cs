@@ -27,5 +27,5 @@ public class DayContentProduct
         Reason = reason;
     }
     
-    private DayContentProduct() {}
+    public DayContentProduct() {}
 }

@@ -120,11 +120,11 @@ public class DayContentsController : ControllerBase
     }
     
     [HttpGet("month-entries")]
-    public async Task<ActionResult<List<DayContent>>> GetMonthEntries([FromQuery] int month, [FromQuery] int year)
+    public async Task<ActionResult<List<DayContent>>> GetMonthEntries([FromQuery] int compId,[FromQuery] int month, [FromQuery] int year)
     {
         try
         {
-            List<DayContent> entries = await dayContentLogic.GetMonthEntries(month, year);
+            List<DayContent> entries = await dayContentLogic.GetMonthEntries(compId,month, year);
             return Ok(entries);
         }
         catch (Exception e)
@@ -135,11 +135,11 @@ public class DayContentsController : ControllerBase
     }
     
     [HttpGet("date-range-entries")]
-    public async Task<ActionResult<List<DayContent>>> GetEntriesForDateRange([FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+    public async Task<ActionResult<List<DayContent>>> GetEntriesForDateRange([FromQuery] int compId,[FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
     {
         try
         {
-            List<DayContent> entries = await dayContentLogic.GetEntriesForDateRange(startDate, endDate);
+            List<DayContent> entries = await dayContentLogic.GetEntriesForDateRange(compId,startDate, endDate);
             return Ok(entries);
         }
         catch (Exception e)

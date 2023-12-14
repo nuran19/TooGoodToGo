@@ -3,6 +3,7 @@ using Domain.DTOs;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Shared.Models;
 
 namespace EfcDataAccess;
@@ -60,23 +61,24 @@ public class DayContentEfcDao : IDayContentDao
         return found;
     }
     
-    public async Task<List<DayContent>> GetMonthEntries(int month, int year)
+    public async Task<List<DayContent>> GetMonthEntries(int compId, int month, int year)
     {
         var startDate = new DateOnly(year, month, 1);
         var endDate = startDate.AddMonths(1).AddDays(-1);
 
         return await context.DayContent
-            .Where(entry => entry.Date >= startDate && entry.Date <= endDate)
+            .Where(entry => entry.Date >= startDate && entry.Date <= endDate && entry.Owner.CompanyId==compId)
             .ToListAsync();
     }
 
-    public async Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate)
+    public async Task<List<DayContent>> GetEntriesForDateRange(int compId,DateOnly startDate, DateOnly endDate)
     {
         // var startDateOnly = DateOnly.FromDateTime(startDate);
         // var endDateOnly = DateOnly.FromDateTime(endDate);
 
         return await context.DayContent
-            .Where(entry => entry.Date >= startDate && entry.Date <= endDate)
+            .Include(dc => dc.Owner) 
+            .Where(entry =>entry.Owner.CompanyId==compId && entry.Date >= startDate && entry.Date <= endDate)
             .ToListAsync();
     }
     

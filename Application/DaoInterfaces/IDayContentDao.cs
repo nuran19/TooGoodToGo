@@ -19,6 +19,6 @@ public interface IDayContentDao
     
     Task DeleteAsync(int dayContent);
     
-    Task<List<DayContent>> GetMonthEntries(int month, int year);
-    Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate);
+    Task<List<DayContent>> GetMonthEntries(int compId, int month, int year);
+    Task<List<DayContent>> GetEntriesForDateRange(int compId,DateOnly startDate, DateOnly endDate);
 }

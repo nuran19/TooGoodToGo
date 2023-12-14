@@ -37,24 +37,6 @@ public class ProductsController : ControllerBase
         }
     }
     
-    //endpoint 
-    //get/retrival of posts
- /*   [HttpGet]
-    public async Task<ActionResult<IEnumerable<Product>>> GetAsync([FromQuery] string? userName, [FromQuery] int? userId, [FromQuery] string? titleContains, [FromQuery] string? bodyContains)
-    {
-        try
-        {
-            SearchProductParametersDto parameters = new ( userName, userId, titleContains, bodyContains);
-            var posts = await productLogic.GetAsync(parameters);
-            return Ok(posts);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return StatusCode(500, e.Message);
-        }
-    } */
-    
  
  //endpoint
  //return list of titles after search of specific criteria
@@ -106,7 +88,7 @@ public class ProductsController : ControllerBase
     }
     
     //drop down products
-    [HttpGet ("GetProducts")]
+    [HttpGet ("GetProducts")] 
     public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] int subCategoryId)
     {
         try

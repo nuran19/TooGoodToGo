@@ -96,14 +96,14 @@ public class DayContentLogic : IDayContentLogic
         this.dayContentDao = dayContentDao;
     }
 
-    public async Task<List<DayContent>> GetMonthEntries(int month, int year)
+    public async Task<List<DayContent>> GetMonthEntries(int compId,int month, int year)
     {
-        return await dayContentDao.GetMonthEntries(month, year);
+        return await dayContentDao.GetMonthEntries(compId,month, year);
     }
     
-    public async Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly endDate)
+    public async Task<List<DayContent>> GetEntriesForDateRange(int compId,DateOnly startDate, DateOnly endDate)
     {
-        return await dayContentDao.GetEntriesForDateRange(startDate, endDate);
+        return await dayContentDao.GetEntriesForDateRange( compId,startDate, endDate);
     }
     // not in use, day content cannot be updated
     public async Task<DayContent> UpdateAsync(DayContentUpdateDto dto)

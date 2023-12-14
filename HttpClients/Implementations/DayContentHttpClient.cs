@@ -168,9 +168,9 @@ public class DayContentHttpClient : IDayContentService
         return dayContent;
     }
     
-    public async Task<List<DayContent>> GetMonthEntries(int month, int year)
+    public async Task<List<DayContent>> GetMonthEntries(int compId, int month, int year)
     {
-        string query = $"?month={month}&year={year}";
+        string query = $"?compId={compId}&month={month}&year={year}";
         HttpResponseMessage response = await client.GetAsync($"/DayContents/month-entries{query}");
         
         string content = await response.Content.ReadAsStringAsync();
@@ -188,9 +188,9 @@ public class DayContentHttpClient : IDayContentService
         return entries;
     }
 
-    public async Task<List<DayContent>> GetEntriesForDateRange(DateOnly startDate, DateOnly  endDate)
+    public async Task<List<DayContent>> GetEntriesForDateRange(int compId,DateOnly startDate, DateOnly  endDate)
     {
-        string query = $"?startDate={startDate.ToString("yyyy-MM-dd")}&endDate={endDate.ToString("yyyy-MM-dd")}";
+        string query = $"?compId={compId}&startDate={startDate.ToString("yyyy-MM-dd")}&endDate={endDate.ToString("yyyy-MM-dd")}";
         HttpResponseMessage response = await client.GetAsync($"/DayContents/date-range-entries{query}");
 
         string content = await response.Content.ReadAsStringAsync();
